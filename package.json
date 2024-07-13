@@ -1,0 +1,20 @@
+{
+  "name": "lcfr-discord-bot",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "commandkit dev",
+    "build": "commandkit build",
+    "start": "commandkit start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "commandkit": "^0.1.10",
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.8.0"
+  }
+}
