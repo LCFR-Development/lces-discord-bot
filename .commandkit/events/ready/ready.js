@@ -1,6 +1,6 @@
 import {
   __name
-} from "../../chunk-H736K5TN.js";
+} from "../../chunk-U2DZE3DI.js";
 
 // src/events/ready/ready.js
 var ready_default = /* @__PURE__ */ __name((client) => {
