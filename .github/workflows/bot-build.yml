@@ -1,0 +1,39 @@
+name:  bot-build
+on:
+ push:
+    branches: [ "main" ]
+ pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "main" ]
+
+jobs: 
+ running:
+  name: Run bot startup check
+  runs-on: ubuntu-latest
+  permissions:
+      contents: read
+      security-events: write
+  steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Install Packages
+        run: npm install packages
+
+      - name: build the bot
+        env: 
+         TOKEN : ${{ secrets.BOT_TOKEN }}
+        run : npm run build
+        continue-on-error: true
+
+      - name: run the bot
+        env: 
+         TOKEN : ${{ secrets.BOT_TOKEN }}
+        run : npm run start
+        continue-on-error: true
+
+      - name: Upload analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: bot-build-results.sarif
+          wait-for-processing: true
