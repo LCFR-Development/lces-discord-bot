@@ -30,7 +30,16 @@ jobs:
         env: 
          TOKEN : ${{ secrets.BOT_TOKEN }}
         run : npm run start
-        continue-on-error: true
+        continue-on-error: false
+
+      - name: Wait for bot to start
+        run: sleep 10  # Adjust the sleep duration as needed
+
+      - name: Stop bot
+        run: |
+         PID=$(ps aux | grep 'node your-bot-file.js' | grep -v grep | awk '{print $2}')
+         kill $PID
+        
 
       - name: Upload analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v2
