@@ -6,7 +6,7 @@ import { CommandKit } from 'commandkit';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const path = require('path');
+import path from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
