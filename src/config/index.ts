@@ -1,18 +1,24 @@
 import { Collection, Interaction, Snowflake } from "discord.js";
 
-import lcfr from "./lcfr";
+// import lcfr from "./lcfr";
 import lcfrDevServer from "./lcfrDevServer";
 
 export interface IConfig {
-   guildID: Snowflake,
-   ranks: {
-      HC: Snowflake
+   guildID: Snowflake;
+   channels: {
+      activityTest: Snowflake,
    }
+   roles: {
+      reactedToActivityTest: Snowflake;
+   };
+   ranks: {
+      HC: Snowflake,
+   };
 } 
 
 const configsCollection: Collection<Snowflake, IConfig> = new Collection();
 
-configsCollection.set(lcfr.guildID, lcfr);
+// configsCollection.set(lcfr.guildID, lcfr);
 configsCollection.set(lcfrDevServer.guildID, lcfrDevServer);
 
 export const configs = configsCollection;
