@@ -17,6 +17,7 @@
     "dotenv": "^16.4.5",
     "eslint": "^9.7.0",
     "mongodb": "^6.8.0",
-    "node.js": "^0.0.1-security"
+    "node.js": "^0.0.1-security",
+    "packages": "^0.0.8"
   }
 }
