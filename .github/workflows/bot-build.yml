@@ -29,8 +29,12 @@ jobs:
       - name: run the bot
         env: 
          TOKEN : ${{ secrets.BOT_TOKEN }}
-        run : timeout 30s npm run start
-        continue-on-error: false
+        run: |
+         timeout 15s npm run start
+         EXIT_CODE=$?
+         if [ $EXIT_CODE -ne 0 ] && [ $EXIT_CODE -ne 124 ]; then
+          exit $EXIT_CODE
+         fi
 
       - name: Upload analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v2
