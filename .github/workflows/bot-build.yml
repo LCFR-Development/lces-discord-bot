@@ -1,37 +1,38 @@
-name:  bot-build
+name: bot-build
+
 on:
- push:
+  push:
     branches: [ "main" ]
- pull_request:
-    # The branches below must be a subset of the branches above
+  pull_request:
     branches: [ "main" ]
 
 jobs: 
- running:
-  name: Run bot startup check
-  runs-on: ubuntu-latest
-  permissions:
+  running:
+    name: Run bot startup check
+    runs-on: ubuntu-latest
+    permissions:
       contents: read
       security-events: write
-  steps:
+
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
         
       - name: Install Packages
-        run: npm install packages
+        run: npm install
 
-      - name: build the bot
+      - name: Build the bot
         env: 
-         TOKEN : ${{ secrets.BOT_TOKEN }}
-        run : npm run build
-        continue-on-error: true
+          TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: npm run build
 
-      - name: run the bot
+      - name: Run the bot
         env: 
-         TOKEN : ${{ secrets.BOT_TOKEN }}
+          TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
-         timeout 15s npm run start
-         EXIT_CODE=$?
-         if [ $EXIT_CODE -ne 0 ] && [ $EXIT_CODE -ne 124 ]; then
-          exit $EXIT_CODE
-         fi
+          timeout 15s npm run start || EXIT_CODE=$?
+          if [ $EXIT_CODE -ne 0 ] && [ $EXIT_CODE -ne 124 ]; then
+            echo "Process exited with an error code $EXIT_CODE"
+            exit $EXIT_CODE
+          fi
+        continue-on-error: true
