@@ -35,9 +35,3 @@ jobs:
          if [ $EXIT_CODE -ne 0 ] && [ $EXIT_CODE -ne 124 ]; then
           exit $EXIT_CODE
          fi
-
-      - name: Upload analysis results to GitHub
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: bot-build-results.sarif
-          wait-for-processing: true
