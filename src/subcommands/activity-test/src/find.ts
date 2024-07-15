@@ -6,6 +6,9 @@ import { ActionRowBuilder, ButtonInteraction, ButtonStyle, Collection, EmbedBuil
 import * as ms from '@lukeed/ms';
 import createDisabledButtonFromButtonKit from "../../../utils/createDisabledButtonFromButtonKit";
 
+import { v4 as uuid } from "uuid";
+import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
+
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
    const config = getConfig(interaction) as IConfig;
@@ -33,12 +36,12 @@ export default async function({interaction}: SlashCommandProps) {
    const inactiveButton = new ButtonKit()
       .setLabel("Show inactive employees")
       .setStyle(ButtonStyle.Danger)
-      .setCustomId((Date.now()).toString());
+      .setCustomId(uuid());
       
    const devInfoButton = new ButtonKit()
       .setLabel("Dev info")
       .setStyle(ButtonStyle.Primary)
-      .setCustomId((Date.now()+1).toString());
+      .setCustomId(uuid());
 
    const mainRow = new ActionRowBuilder<ButtonKit>().setComponents([inactiveButton, devInfoButton]);
    
@@ -49,6 +52,7 @@ export default async function({interaction}: SlashCommandProps) {
    inactiveButton.onClick(
       async (subInteraction: ButtonInteraction) => {
          await subInteraction.deferReply({ephemeral: true});
+         await subInteraction.editReply({embeds: [getMessageLoadingEmbed("Getting members...", config)]});
 
          const membersOnLoa: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.loaRole))?.members ?? new Collection();
          const reactedMembers: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.reactedToActivityTest))?.members ?? new Collection();
@@ -101,7 +105,7 @@ export default async function({interaction}: SlashCommandProps) {
          const reactedMembersButton = new ButtonKit()
             .setLabel("Reacted employees")
             .setStyle(ButtonStyle.Secondary)
-            .setCustomId((Date.now()+2).toString());
+            .setCustomId(uuid());
          
          const devInfoMessage = await subInteraction.reply({
             ephemeral: true,
@@ -117,7 +121,7 @@ export default async function({interaction}: SlashCommandProps) {
                   reactedMembersString += `<@!${memberID}> (${username})\n`;
                }
                const plainReactedMembersEmbed = new EmbedBuilder()
-                  .setDescription(reactedMembersString)
+                  .setDescription(reactedMembersString || "No members reacted.")
                   .setColor("Grey");
                await subSubInteraction.reply({ephemeral: true, embeds: [plainReactedMembersEmbed]});
             },

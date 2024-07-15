@@ -44,6 +44,7 @@ import { CommandKit } from "commandkit";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import path from "path";
+import mongoose from "mongoose";
 var __dirname = dirname(fileURLToPath(import.meta.url));
 var client = new Client({
   intents: [
@@ -64,4 +65,16 @@ new CommandKit({
   skipBuiltInValidations: true,
   bulkRegister: true
 });
-client.login(process.env.TOKEN);
+(async () => {
+  try {
+    if (await mongoose.connect(process.env.DB_LOGIN)) {
+      console.log("\u2705 Connected to DB");
+    } else {
+      console.log("\u274C Couldn't connect to DB");
+    }
+    await client.login(process.env.TOKEN);
+  } catch (e) {
+    console.log("\u274C There was an error while connecting to the database and/or logging in.");
+    console.log(e);
+  }
+})();

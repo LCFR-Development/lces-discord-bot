@@ -13,6 +13,9 @@ export interface IConfig {
       loaRole: Snowflake;
       employeeRole: Snowflake;
    };
+   emojis: {
+      loading: string;
+   };
    ranks: {
       HC: Snowflake,
    };
