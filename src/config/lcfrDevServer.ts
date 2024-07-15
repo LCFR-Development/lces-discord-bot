@@ -6,7 +6,8 @@ const config: IConfig = {
       activityTest: "1262154276692689028",
    },
    roles: {
-      reactedToActivityTest: "1262170352038182992"
+      reactedToActivityTest: "1262170352038182992",
+      loaRole: "1262378282146332713"
    },
    ranks: {
       HC: "1262127012538093609"
