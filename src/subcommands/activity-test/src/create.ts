@@ -6,22 +6,34 @@ import { ButtonInteraction, ButtonStyle, Colors, Snowflake } from "discord.js";
 import * as ms from '@lukeed/ms';
 import getCommandSuccessEmbed from "../../../utils/getCommandSuccessEmbed";
 import getCommandFailedToRunEmbed from "../../../utils/getCommandFailedToRunEmbed";
-import {generate as generateID} from "generate-password";
 import { IActivityCheck, MActivityCheck, SActivityCheck } from '../../../schemas/activity-check';
+import { v4 as uuid } from 'uuid';
+import createDisabledButtonFromButtonKit from "../../../utils/createDisabledButtonFromButtonKit";
+import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
    const config = getConfig(interaction) as IConfig;
 
+   if (!interaction.inCachedGuild()) return;
+
+   await interaction.editReply({embeds: [getMessageLoadingEmbed("Preparing activity check...", config)]});
+
+   for (const [,member] of (await interaction.guild.roles.fetch(config.roles.reactedToActivityTest))!.members) {
+      if (member.roles.cache.has(config.roles.reactedToActivityTest)) {
+         member.roles.remove(config.roles.reactedToActivityTest);
+      }
+   }
+
    const time: string = interaction.options.getString("time") as string;
    const timeMS = ms.parse(time);
 
    if (timeMS === undefined) {
-      await interaction.followUp({embeds: [getCommandFailedToRunEmbed("The time you provided is invalid.")]});
+      await interaction.editReply({content: "", embeds: [getCommandFailedToRunEmbed("The time you provided is invalid.")]});
       return;
    }
 
-   const activeButtonCustomID = (Date.now()).toString();
+   const activeButtonCustomID = uuid();
 
    const activeButton = new ButtonKit()
       .setLabel("I'm active!")
@@ -31,13 +43,7 @@ export default async function({interaction}: SlashCommandProps) {
    const row = new ActionRowBuilder<ButtonKit>().setComponents(activeButton);
 
    
-   const activityTestID = generateID({
-      length: 20,
-      numbers: true,
-      uppercase: false,
-      excludeSimilarCharacters: true,
-   })
-   
+   const activityTestID = uuid();
    
    const deadline = new Date(Date.now() + timeMS);
    const deadlineTimeStamp = Math.floor(deadline.getTime()/1000.0);
@@ -90,19 +96,12 @@ export default async function({interaction}: SlashCommandProps) {
 
    activeButton.onEnd(
       async () => {
-         const label = activeButton.toJSON().label as string;
-         const style = activeButton.toJSON().style;
-
-         const disabledActiveButton = new ButtonKit()
-            .setLabel(label)
-            .setStyle(style)
-            .setCustomId("disabled")
-            .setDisabled(true)
+         const disabledActiveButton = createDisabledButtonFromButtonKit(activeButton);
          const disabledRow = new ActionRowBuilder<ButtonKit>().setComponents(disabledActiveButton);
 
          message.edit({components: [disabledRow]});
       }
    )
 
-   await interaction.followUp({embeds: [getCommandSuccessEmbed()]});
+   await interaction.editReply({content: "", embeds: [getCommandSuccessEmbed()]});
 }

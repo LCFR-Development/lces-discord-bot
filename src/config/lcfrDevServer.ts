@@ -10,6 +10,9 @@ const config: IConfig = {
       loaRole: "1262378282146332713",
       employeeRole: "1262425657518854236"
    },
+   emojis: {
+      loading: "<a:Loading:1262459581477556315>",
+   },
    ranks: {
       HC: "1262127012538093609"
    }

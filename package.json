@@ -17,8 +17,11 @@
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "eslint": "^9.7.0",
-    "generate-password": "^1.7.1",
     "mongoose": "^8.5.1",
-    "node.js": "^0.0.1-security"
+    "node.js": "^0.0.1-security",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^10.0.0"
   }
 }
