@@ -2,7 +2,7 @@ name: check bot startup
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main","dev"]
   pull_request:
     branches: [ "main" ]
 
@@ -24,13 +24,15 @@ jobs:
       - name: Build the bot
         env: 
           TOKEN: ${{ secrets.BOT_TOKEN }}
+          DB_LOGIN: ${{ secrets.DB_LOGIN }}
         run: npm run build
 
       - name: Run the bot
         env: 
           TOKEN: ${{ secrets.BOT_TOKEN }}
+          DB_LOGIN: ${{ secrets.DB_LOGIN }}
         run: |
-          timeout 15s npm run start || EXIT_CODE=$?
+          timeout 30s npm run start || EXIT_CODE=$?
           if [ $EXIT_CODE -ne 0 ] && [ $EXIT_CODE -ne 124 ]; then
             echo "Process exited with an error code $EXIT_CODE"
             exit $EXIT_CODE
