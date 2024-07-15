@@ -1,0 +1,44 @@
+name: Build and Create Pull Request
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to create a pull request
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the bot
+        run: npm run build
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git checkout -b build-changes
+            git add .
+            git commit -m "Automated build: $(date +'%Y-%m-%d %H:%M:%S')"
+            git push origin build-changes
+          else
+            echo "No changes to commit"
+        continue-on-error: true
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: build-changes
+          title: "Automated build changes"
+          body: "This pull request contains automated build changes."
+          labels: automated-build
