@@ -12,12 +12,13 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@lukeed/ms": "^2.0.2",
     "commandkit": "^0.1.10",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "eslint": "^9.7.0",
-    "mongodb": "^6.8.0",
-    "node.js": "^0.0.1-security",
-    "packages": "^0.0.8"
+    "generate-password": "^1.7.1",
+    "mongoose": "^8.5.1",
+    "node.js": "^0.0.1-security"
   }
 }
