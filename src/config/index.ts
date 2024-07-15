@@ -11,6 +11,7 @@ export interface IConfig {
    roles: {
       reactedToActivityTest: Snowflake;
       loaRole: Snowflake;
+      employeeRole: Snowflake;
    };
    ranks: {
       HC: Snowflake,

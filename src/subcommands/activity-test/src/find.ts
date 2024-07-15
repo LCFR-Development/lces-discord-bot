@@ -1,13 +1,15 @@
 import { ButtonKit, SlashCommandProps } from "commandkit";
-import { getConfig } from "../../../config";
+import { getConfig, IConfig } from "../../../config";
 import { MActivityCheck } from '../../../schemas/activity-check';
 import getCommandFailedToRunEmbed from "../../../utils/getCommandFailedToRunEmbed";
-import { ActionRowBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonInteraction, ButtonStyle, Collection, EmbedBuilder, GuildMember, Snowflake } from "discord.js";
 import * as ms from '@lukeed/ms';
+import createDisabledButtonFromButtonKit from "../../../utils/createDisabledButtonFromButtonKit";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
-   const config = getConfig(interaction);
+   const config = getConfig(interaction) as IConfig;
+   if (!interaction.inCachedGuild()) return;
 
    const id = interaction.options.getString("id");
 
@@ -16,15 +18,7 @@ export default async function({interaction}: SlashCommandProps) {
       await interaction.followUp({embeds: [getCommandFailedToRunEmbed("Activity Check not found.")]});
       return;
    }
-
-   /**
-    *    ID: string,
-   buttonID: string,
-   createdBy: Snowflake,
-   deadline: string,
-   employeesReacted: Array<Snowflake>,
-    */
-
+   
    const deadlineTimestamp = Math.floor((new Date(document.deadline).getTime())/1000);
 
    const activityCheckEmbed = new EmbedBuilder()
@@ -48,19 +42,50 @@ export default async function({interaction}: SlashCommandProps) {
 
    const mainRow = new ActionRowBuilder<ButtonKit>().setComponents([inactiveButton, devInfoButton]);
    
-   const message = await interaction.followUp({embeds: [activityCheckEmbed], components: [mainRow], fetchReply: true});
+   const mainMessage = await interaction.followUp({embeds: [activityCheckEmbed], components: [mainRow], fetchReply: true});
+   
+   await interaction.guild?.members.fetch();
 
    inactiveButton.onClick(
       async (subInteraction: ButtonInteraction) => {
+         await subInteraction.deferReply({ephemeral: true});
 
+         const membersOnLoa: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.loaRole))?.members ?? new Collection();
+         const reactedMembers: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.reactedToActivityTest))?.members ?? new Collection();
+         const employees: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.employeeRole))?.members ?? new Collection();
+
+
+         const inactiveMembers: Collection<Snowflake, GuildMember> = new Collection();
+
+         for (const [id, member] of interaction.guild.members.cache) {
+            if (!member.user.bot && employees.has(id) && !membersOnLoa.has(id) && !reactedMembers.has(id)) {
+               inactiveMembers.set(id, member);
+            }
+         }
+
+         let inactiveMembersString: string = "";
+
+         if (inactiveMembers.size > 0) {
+            for (const [id ,member] of inactiveMembers) {
+               let username = member.user.username ?? "No username found";
+               inactiveMembersString += `<@!${id}> (${username})\n`;
+            }
+         } else {
+            inactiveMembersString = "No inactive members!";
+         }
+
+         const inactiveMembersEmbed = new EmbedBuilder()
+            .setDescription(inactiveMembersString)
+            .setColor("Blue");
+
+         await subInteraction.followUp({embeds: [inactiveMembersEmbed]});
       },
       {
-         message: message,
+         message: mainMessage,
          time: ms.parse("1m"),
       }
    )
 
-   await interaction.guild?.members.fetch();
 
    devInfoButton.onClick(
       async (subInteraction: ButtonInteraction) => {
@@ -73,18 +98,18 @@ export default async function({interaction}: SlashCommandProps) {
                {name: "Deadline", value: document.deadline + "\n" + `(${new Date(document.deadline).getTime()})`}
             )
             .setColor("Blurple")
-         const plainReactedMembersButton = new ButtonKit()
-            .setLabel("Plain reacted employees")
+         const reactedMembersButton = new ButtonKit()
+            .setLabel("Reacted employees")
             .setStyle(ButtonStyle.Secondary)
             .setCustomId((Date.now()+2).toString());
          
          const devInfoMessage = await subInteraction.reply({
             ephemeral: true,
             embeds: [devInfoEmbed],
-            components: [new ActionRowBuilder<ButtonKit>({components: [plainReactedMembersButton]})],
+            components: [new ActionRowBuilder<ButtonKit>({components: [reactedMembersButton]})],
             fetchReply: true});
          
-         plainReactedMembersButton.onClick(
+         reactedMembersButton.onClick(
             async (subSubInteraction: ButtonInteraction) => {
                let reactedMembersString = "";
                for (const memberID of document.employeesReacted) {
@@ -101,10 +126,9 @@ export default async function({interaction}: SlashCommandProps) {
                time: ms.parse("1m"),
             }
          )
-
       },
       {
-         message: message,
+         message: mainMessage,
          time: ms.parse("1m")
       }
    )
