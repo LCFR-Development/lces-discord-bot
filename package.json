@@ -18,8 +18,7 @@
     "dotenv": "^16.4.5",
     "eslint": "^9.7.0",
     "generate-password": "^1.7.1",
-    "mongodb": "^6.8.0",
-    "node.js": "^0.0.1-security",
-    "packages": "^0.0.8"
+    "mongoose": "^8.5.1",
+    "node.js": "^0.0.1-security"
   }
 }
