@@ -14,6 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Use the version of Node.js you need
+
       - name: Install dependencies
         run: npm install
 
@@ -35,6 +40,7 @@ jobs:
         continue-on-error: true
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,3 +48,12 @@ jobs:
           title: "Automated build changes"
           body: "This pull request contains automated build changes."
           labels: automated-build
+
+      - name: Delete Branch
+        if: success() && steps.cpr.outputs.pull-request-url != ''
+        run: |
+          PR_NUMBER=$(basename "${{ steps.cpr.outputs.pull-request-url }}")
+          gh pr merge $PR_NUMBER --squash --admin
+          git push origin --delete build-changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
