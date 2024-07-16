@@ -82,7 +82,7 @@ export default async function({interaction}: SlashCommandProps) {
             .setDescription(inactiveMembersString)
             .setColor("Blue");
 
-         await subInteraction.followUp({embeds: [inactiveMembersEmbed]});
+         await subInteraction.editReply({embeds: [inactiveMembersEmbed]});
       },
       {
          message: mainMessage,
