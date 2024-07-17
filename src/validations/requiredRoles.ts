@@ -1,6 +1,7 @@
 import { ValidationProps } from "commandkit";
 import { EmbedBuilder, Snowflake } from "discord.js";
 import CustomCommandOptions from "../types/CustomCommandOptions";
+import getNoPermissionEmbed from "../utils/getNoPermissionEmbed";
 
 export default function({commandObj, interaction}: ValidationProps): boolean {
    //* Type checks
@@ -16,12 +17,7 @@ export default function({commandObj, interaction}: ValidationProps): boolean {
    //* Role check
    const requiredRoles = commandOptions.requiredRoles;
 
-   const noPermsEmbed = new EmbedBuilder()
-      .setDescription(
-         `:x: You do not have permission to use this command:\n\n` + 
-         `Missing Role`
-      )
-      .setColor("Red");
+   const noPermsEmbed = getNoPermissionEmbed("Missing role.");
 
    if (requiredRoles.areAllRequired) {
       if (!interaction.member.roles.cache.hasAll(...requiredRoles.roles)) {

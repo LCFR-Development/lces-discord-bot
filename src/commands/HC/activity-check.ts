@@ -10,7 +10,7 @@ import subcommands from "../../subcommands/activity-test/index";
 function getRequiredRoles() {
    let temp: Array<Snowflake> = [];
    for (const [,config] of configs) {
-      temp.push(config.ranks.HC);
+      temp.push(config.rankCategories.high_command);
    }
    return temp;
 }

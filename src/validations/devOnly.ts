@@ -1,6 +1,7 @@
 import { ValidationProps } from "commandkit";
 import { EmbedBuilder } from "discord.js";
 import CustomCommandOptions from "../types/CustomCommandOptions";
+import getNoPermissionEmbed from "../utils/getNoPermissionEmbed";
 
 export default function({commandObj, interaction, handler}: ValidationProps): boolean {
    //* Type checks 
@@ -11,12 +12,7 @@ export default function({commandObj, interaction, handler}: ValidationProps): bo
    if (!commandOptions.devOnly) return false;
 
    //* Dev Only check
-   const noPermsEmbed = new EmbedBuilder()
-      .setDescription(
-         `:x: You do not have permission to use this command:\n\n` + 
-         `This command is dev only`
-      )
-      .setColor("Red");
+   const noPermsEmbed = getNoPermissionEmbed("This command is dev only.");
 
    if (!handler.devUserIds.includes(interaction.user.id)) {
       if (interaction.isChatInputCommand()) {
