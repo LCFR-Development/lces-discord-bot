@@ -38,7 +38,7 @@ const config: IConfig = {
       low_command: "temp",
       high_command: "1262127012538093609",
       commissioner_office: "temp"
-   };
+   }
 };
 
 export default config;
