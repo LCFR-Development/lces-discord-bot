@@ -58,7 +58,7 @@ export async function run({interaction, client}: SlashCommandProps) {
       break;
       case "clear":
          await subcommands.clear({interaction} as SlashCommandProps);
-         break;
+      break;
          case "find":
             await subcommands.find({interaction} as SlashCommandProps);
       break;
