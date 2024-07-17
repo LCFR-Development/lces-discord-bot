@@ -1,6 +1,5 @@
 import { SlashCommandBuilder, Snowflake } from "discord.js";
 
-import ms from "@lukeed/ms";
 import { SlashCommandProps } from "commandkit";
 import CustomCommandOptions from "../../types/CustomCommandOptions";
 import { configs } from "../../config";
