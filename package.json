@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "dev": "commandkit dev",
+    "dev": "nodemon",
     "build": "commandkit build",
     "start": "commandkit start"
   },
@@ -22,6 +22,8 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/uuid": "^10.0.0"
+    "@types/uuid": "^10.0.0",
+    "nodemon": "^3.1.4",
+    "tsx": "^4.16.2"
   }
 }
