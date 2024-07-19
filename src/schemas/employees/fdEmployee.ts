@@ -2,10 +2,23 @@ import { model, Schema } from "mongoose";
 import { FDRanks, FMRanks } from "../../config/fdRanks";
 
 export interface IFDEmployee {
+   /**
+    * Our UUID of the employee (the same on all employee documents)
+    */
    ID: string;
+   /**
+    * The employee's callsign
+    */
    callsign: string;
+   /**
+    * The employee's rank as an enum
+    */
    rank: FDRanks;
-   fmRank: FMRanks;
+   /**
+    * The employee's FM rank, -1 or none if not in the sub-division
+    * @deprecated Not made yet
+    */
+   fmRank?: FMRanks; //FIXME: Make required when it'll be done
 }
 
 export const SFDEmployee = new Schema<IFDEmployee>({
@@ -16,3 +29,10 @@ export const SFDEmployee = new Schema<IFDEmployee>({
 });
 
 export const MFDEmployee = model<IFDEmployee>("Fire-Department-Employees", SFDEmployee);
+
+const stuff: IFDEmployee = {
+   ID: "test",
+   callsign: "test",
+   rank: 1,
+   fmRank: -1
+}

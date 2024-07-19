@@ -30,9 +30,21 @@ export enum FDRankCategories {
 }
 
 interface FDRank {
+   /**
+    * The rank as an enum
+    */
    rank: FDRanks;
+   /**
+    * Discord ID of the rank's role in the discord server
+    */
    rankID: Snowflake;
+   /**
+    * Category of the rank as an enum
+    */
    rankCategory: FDRankCategories;
+   /**
+    * Discord ID of the category role in the discord server
+    */
    rankCategoryID: Snowflake;
 }
 

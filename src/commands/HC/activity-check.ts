@@ -66,5 +66,5 @@ export async function run({interaction, client}: SlashCommandProps) {
 }
 
 export const options: CustomCommandOptions = {
-   requiredRoles: {roles: getRequiredRoles(), areAllRequired: false}
+   requiredRoles: {roles: getRequiredRoles(), areAllRequired: false},
 }

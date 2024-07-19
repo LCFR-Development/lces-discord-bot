@@ -4,18 +4,33 @@ import { Collection, Interaction, Snowflake } from "discord.js";
 import lcfrDevServer from "./lcfrDevServer";
 
 export interface IConfig {
+   /**
+    * Discord ID of the server/guild
+    */
    guildID: Snowflake;
+   /**
+    * Discord IDs of channels
+    */
    channels: {
       activityTest: Snowflake,
    }
+   /**
+    * Discord IDs of misc roles
+    */
    roles: {
       reactedToActivityTest: Snowflake;
       loaRole: Snowflake;
       employeeRole: Snowflake;
    };
+   /**
+    * Markdown of emojis
+    */
    emojis: {
       loading: string;
    };
+   /**
+    * Discord IDs of rank's roles
+    */
    ranks: {
       probationary_firefighter: Snowflake,
       firefighter: Snowflake,
@@ -34,6 +49,9 @@ export interface IConfig {
       deputy_commissioner: Snowflake,
       commissioner: Snowflake
    }
+   /**
+    * Discord IDs of category roles
+    */
    rankCategories: {
       trainee_rank: Snowflake,
       low_ranks: Snowflake,

@@ -1,5 +1,10 @@
 import { ButtonKit } from "commandkit";
 
+/**
+ * 
+ * @param button 
+ * @returns 
+ */
 export default function(button: ButtonKit): ButtonKit {
    const buttonJSON = button.toJSON();
 
