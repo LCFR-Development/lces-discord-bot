@@ -2,8 +2,8 @@ import { ButtonKit } from "commandkit";
 
 /**
  * 
- * @param button 
- * @returns 
+ * @param button The ButtonKit to disable
+ * @returns Disabled ButtonKit with "disabled" CustomID
  */
 export default function(button: ButtonKit): ButtonKit {
    const buttonJSON = button.toJSON();
