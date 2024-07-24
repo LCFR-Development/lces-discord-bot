@@ -55,9 +55,15 @@ export default async function({interaction}: SlashCommandProps) {
          await subInteraction.editReply({embeds: [getMessageLoadingEmbed("Getting members...", config)]});
 
          const membersOnLoa: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.loaRole))?.members ?? new Collection();
-         const reactedMembers: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.reactedToActivityTest))?.members ?? new Collection();
+         const reactedMembers: Collection<Snowflake, GuildMember> = new Collection();
          const employees: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.employeeRole))?.members ?? new Collection();
 
+         // Get all employees that reacted from Employee role and the array in db
+         for (const [id, member] of employees) {
+            if (document.employeesReacted.includes(id)) {
+               reactedMembers.set(id, member);
+            }            
+         }
 
          const inactiveMembers: Collection<Snowflake, GuildMember> = new Collection();
 

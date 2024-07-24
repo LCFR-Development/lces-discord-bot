@@ -13,7 +13,7 @@ function getRequiredRoles() {
 }
 
 export const data = new SlashCommandBuilder()
-   .setName("Infract")
+   .setName("infract")
    .setDescription("Infract an employee")
    .addUserOption(o => o
       .setName("employee")
