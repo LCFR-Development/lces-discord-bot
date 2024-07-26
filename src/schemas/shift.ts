@@ -15,6 +15,11 @@ export interface IShift {
     */
    isDaily: boolean;
    /**
+    * Array of employee UUIDs of employees that attended.
+    * @deprecated Not made yet
+    */
+   employeesAttended?: Array<string>;
+   /**
     * Date and time of the shift
     */
    time: string;
@@ -24,6 +29,7 @@ export const SShift = new Schema<IShift>({
    ID: {type: String, required: true},
    host: {type: String, required: true},
    isDaily: {type: Boolean, required: true},
+   employeesAttended: {type: [{type: String, required: true}], default: []},
    time: {type: String, required: true}
 })
 
