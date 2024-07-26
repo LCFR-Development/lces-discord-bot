@@ -22,6 +22,15 @@ export const data = new SlashCommandBuilder()
       )
    )
    .addSubcommand(s => s
+      .setName("resend")
+      .setDescription("Resend an activity check from id")
+      .addStringOption(o => o
+         .setName("id")
+         .setDescription("ID of the activity check")
+         .setRequired(true)
+      )
+   )
+   .addSubcommand(s => s
       .setName("clear")
       .setDescription("Clear the server after an activity check.")
    )
@@ -35,23 +44,26 @@ export const data = new SlashCommandBuilder()
       )
    )
 
-export async function run({interaction, client}: SlashCommandProps) {
-   type Subcommands = "prepare" | "create" | "clear" | "find"; 
+export async function run({interaction, client, handler}: SlashCommandProps) {
+   type Subcommands = "prepare" | "create" | "clear" | "find" | "resend"; 
 
    const subcommand: Subcommands = interaction.options.getSubcommand() as Subcommands;
 
    switch (subcommand) {
       case "prepare":
-         subcommands.prepare({interaction} as SlashCommandProps);
+         subcommands.prepare({interaction, client, handler});
       break;
       case "create":
-         await subcommands.create({interaction} as SlashCommandProps);
+         await subcommands.create({interaction, client, handler});
       break;
       case "clear":
-         await subcommands.clear({interaction} as SlashCommandProps);
+         await subcommands.clear({interaction, client, handler});
       break;
-         case "find":
-            await subcommands.find({interaction} as SlashCommandProps);
+      case "find":
+         await subcommands.find({interaction, client, handler});
+      break;
+      case "resend":
+         await subcommands.resend({interaction, client, handler});
       break;
    }
 }
