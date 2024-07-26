@@ -9,7 +9,8 @@ import getCommandSuccessEmbed from "../../../utils/getCommandSuccessEmbed";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
-   const config = getConfig(interaction) as IConfig;
+   const config = getConfig(interaction);
+   if (!config) return;
    if (!interaction.inCachedGuild()) return;
 
    const id = interaction.options.getString("id");
@@ -17,6 +18,11 @@ export default async function({interaction}: SlashCommandProps) {
    const document = await MActivityCheck.findOne({ID: id});
    if (!document) {
       await interaction.followUp({embeds: [getCommandFailedToRunEmbed("Activity Check not found.")]});
+      return;
+   } 
+
+   if (document.guildID !== interaction.guild.id) {
+      await interaction.editReply({embeds: [getCommandFailedToRunEmbed("This activity check is from another server.")]});
       return;
    }
    
@@ -33,9 +39,9 @@ export default async function({interaction}: SlashCommandProps) {
    const row = new ActionRowBuilder<ButtonKit>().setComponents(activeButton);
 
    const activityCheckEmbed = new EmbedBuilder()
-      .setTitle("LCFR | Activity check")
+      .setTitle(`${config.texts.deptName} | Activity check`)
       .setDescription(
-         "The LCFR High Command team has decided to host an activity check. Please press the button below to let the HC team know you are active. Not reacting will result in punishment.\n\n" +
+         config.texts.ACMainMsg + "\n\n" +
          `Time limit: <t:${deadlineTimestamp}:R>`
       )
       .setFooter({text: `AC ID: ${document.ID}`})

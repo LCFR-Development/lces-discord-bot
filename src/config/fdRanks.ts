@@ -1,5 +1,5 @@
 import { Snowflake } from "discord.js";
-import { getConfig, getConfigByID, IConfig } from './index';
+import { getConfig, getConfigByID, IConfig, instanceOfFDConfig } from './index';
 
 export enum FDRanks {
    probationary_firefighter,
@@ -72,6 +72,8 @@ export function getFDRankInfo(rank: FDRanks, guildID: Snowflake): FDRank | undef
    if (!config) {
       return undefined;
    }
+
+   if (!instanceOfFDConfig(config)) return undefined;
 
    const tempRankString = FDRanks[rank] as keyof typeof config.ranks;
    let tempCategoryString: keyof typeof config.rankCategories;

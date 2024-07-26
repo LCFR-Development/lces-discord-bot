@@ -15,6 +15,10 @@ export interface IActivityCheck {
     */
    createdBy: Snowflake,
    /**
+    * The ID of the guild that the AC is in.
+    */
+   guildID: Snowflake,
+   /**
     * The date and time when the activity check ends. 
     */
    deadline: string,
@@ -28,6 +32,7 @@ export const SActivityCheck = new Schema<IActivityCheck>({
    ID: {type: String, required: true},
    buttonID: {type: String, required: true},
    createdBy: {type: String, required: true},
+   guildID: {type: String, required: true},
    deadline: {type: String, required: true},
    employeesReacted: {type: [{type: String, required: true}], required: true}
 })

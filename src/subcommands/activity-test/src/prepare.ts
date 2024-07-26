@@ -6,7 +6,8 @@ export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
    if (!interaction.inCachedGuild()) return;
 
-   const config = getConfig(interaction) as IConfig;
+   const config = getConfig(interaction);
+   if (!config) return;
 
 
    for (const [,member] of (await interaction.guild.roles.fetch(config.roles.reactedToActivityTest))!.members) {

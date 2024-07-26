@@ -13,7 +13,8 @@ import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
-   const config = getConfig(interaction) as IConfig;
+   const config = getConfig(interaction);
+   if (!config) return;
 
    if (!interaction.inCachedGuild()) return;
 
@@ -52,6 +53,7 @@ export default async function({interaction}: SlashCommandProps) {
       ID: activityTestID,
       buttonID: activeButtonCustomID,
       createdBy: interaction.user.id,
+      guildID: interaction.guild.id,
       deadline: deadline,
       employeesReacted: []
    });
@@ -59,9 +61,9 @@ export default async function({interaction}: SlashCommandProps) {
 
 
    const activityCheckEmbed = new EmbedBuilder()
-      .setTitle("LCFR | Activity check")
+      .setTitle(`${config.texts.deptName} | Activity check`)
       .setDescription(
-         "The LCFR High Command team has decided to host an activity check. Please press the button below to let the HC team know you are active. Not reacting will result in punishment.\n\n" +
+         config.texts.ACMainMsg + "\n\n" +
          `Time limit: <t:${deadlineTimeStamp}:R>`
       )
       .setFooter({text: `AC ID: ${activityTestID}`})

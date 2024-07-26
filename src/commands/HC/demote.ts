@@ -2,7 +2,7 @@ import { SlashCommandBuilder, Snowflake, GuildMember } from "discord.js";
 
 import { SlashCommandProps } from "commandkit";
 import CustomCommandOptions from "../../types/CustomCommandOptions";
-import { getConfig, getGlobalConfig } from "../../config";
+import { getConfig} from "../../config";
 import { IConfig } from '../../config/index.ts'
 import getCommandFailedToRunEmbed from "../../utils/getCommandFailedToRunEmbed.ts";
 
@@ -23,7 +23,8 @@ export const data = new SlashCommandBuilder()
 export async function run({interaction, client}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
 
-   const config = getConfig(interaction) as IConfig;
+   const config = getConfig(interaction);
+   if (!config) return;
    const employee = interaction.options.getMember("employee") as GuildMember;
    const reason = interaction.options.getString('reason');
 

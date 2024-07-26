@@ -9,6 +9,23 @@ export interface IConfig {
     */
    guildID: Snowflake;
    /**
+    * Used for type checks
+    */
+   readonly type: "fd" | "ems";
+   /**
+    * Texts in command responces
+    */
+   texts: {
+      /**
+       * The main dept. name (eg. LCFR), used in eg. Shift and Activity Check embeds.
+       */
+      deptName: string;
+      /**
+       * The activity test main string
+       */
+      ACMainMsg: string;
+   }
+   /**
     * Discord IDs of channels
     */
    channels: {
@@ -29,6 +46,20 @@ export interface IConfig {
    emojis: {
       loading: string;
    };
+} 
+
+export interface IEMSConfig extends IConfig {
+   /**
+    * Used for type checks
+    */
+   readonly type: "ems";
+}
+
+export interface IFDConfig extends IConfig {
+   /**
+    * Used for type checks
+    */
+   readonly type: "fd";
    /**
     * Discord IDs of rank's roles
     */
@@ -61,7 +92,7 @@ export interface IConfig {
       high_command: Snowflake,
       commissioner_office: Snowflake
    };
-} 
+}
 
 export interface IGlobalConfig {
    /**
@@ -72,6 +103,9 @@ export interface IGlobalConfig {
       loaRole: Array<Snowflake>;
       employeeRole: Array<Snowflake>;
    };
+}
+
+export interface IFDGlobalConfig extends IGlobalConfig {
    /**
     * Arrays of role IDs from all servers
     */
@@ -106,22 +140,44 @@ export interface IGlobalConfig {
    };
 }
 
-const configsCollection: Collection<Snowflake, IConfig> = new Collection();
+export interface IEMSGlobalConfig extends IGlobalConfig {
+
+}
+
+const configsCollection: Collection<Snowflake, IFDConfig | IEMSConfig> = new Collection();
 
 // configsCollection.set(lcfr.guildID, lcfr);
 configsCollection.set(lcfrDevServer.guildID, lcfrDevServer);
 
-export function getConfig(interaction: Interaction): IConfig | undefined {
+export function getConfig(interaction: Interaction): IFDConfig | IEMSConfig | undefined {
    if (!interaction.guildId) return undefined;
    return configsCollection.get(interaction.guildId);
 }
 
+export function getConfigByID(id: Snowflake): IFDConfig | IEMSConfig | undefined {
+   return configsCollection.get(id);
+}
+
+export function instanceOfFDConfig(config: IFDConfig | IEMSConfig): config is IFDConfig {
+   if (config.type === "fd") {
+      return true;
+   }
+   return false;
+}
+
+export function instanceOfEMSConfig(config: IFDConfig | IEMSConfig): config is IEMSConfig {
+   if (config.type === "ems") {
+      return true;
+   }
+   return false;
+}
+
 /**
  * 
- * @returns Config from all servers (check IGlobalConfig for format).
+ * @returns Config from all servers.
  */
-export function getGlobalConfig(): IGlobalConfig {
-   let globalConfig: IGlobalConfig = {
+export function getFDGlobalConfig(): IFDGlobalConfig {
+   let globalConfig: IFDGlobalConfig = {
       rankCategories: {
          commissioner_office: [],
          high_command: [],
@@ -156,6 +212,7 @@ export function getGlobalConfig(): IGlobalConfig {
    };
 
    for (const [,config] of configsCollection) {
+      if (!instanceOfFDConfig(config)) continue;
       for (const property in config.roles) {
          globalConfig.roles[property as keyof typeof globalConfig.roles].push(config.roles[property as keyof typeof config.roles]);
       }
@@ -170,7 +227,21 @@ export function getGlobalConfig(): IGlobalConfig {
    return globalConfig;
 }
 
+export function getEMSGlobalConfig(): IEMSGlobalConfig {
+   let globalConfig: IEMSGlobalConfig = {
+      roles: {
+         employeeRole: [],
+         loaRole: [],
+         reactedToActivityTest: [],
+      }
+   };
 
-export function getConfigByID(id: Snowflake): IConfig | undefined {
-   return configsCollection.get(id);
+   for (const [,config] of configsCollection) {
+      if (!instanceOfEMSConfig(config)) continue;
+      for (const property in config.roles) {
+         globalConfig.roles[property as keyof typeof globalConfig.roles].push(config.roles[property as keyof typeof config.roles]);
+      }
+   }
+
+   return globalConfig;
 }

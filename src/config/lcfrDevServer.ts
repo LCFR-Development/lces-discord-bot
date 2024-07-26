@@ -1,10 +1,15 @@
-import { IConfig } from ".";
+import { IConfig, IFDConfig } from ".";
 
-const config: IConfig = {
+const config: IFDConfig = {
    guildID: "1261627826822447176",
+   type: "fd",
    channels: {
       activityTest: "1262154276692689028",
       shift: "1266302472809615360"
+   },
+   texts: {
+      deptName: "LCDS",
+      ACMainMsg: "The LCFR High Command team has decided to host an activity check. Please press the button below to let the HC team know you are active. Not reacting will result in punishment."
    },
    roles: {
       reactedToActivityTest: "1262170352038182992",

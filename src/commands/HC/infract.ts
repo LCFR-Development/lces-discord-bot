@@ -2,8 +2,6 @@ import { SlashCommandBuilder, Snowflake } from "discord.js";
 
 import { SlashCommandProps } from "commandkit";
 import CustomCommandOptions from "../../types/CustomCommandOptions";
-import { getGlobalConfig } from "../../config";
-import { get } from "mongoose";
 
 export const data = new SlashCommandBuilder()
    .setName("infract")

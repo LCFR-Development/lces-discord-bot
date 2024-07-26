@@ -2,7 +2,7 @@ import { ValidationProps } from "commandkit";
 import { CommandCategories } from "../config/misc";
 import { Snowflake } from "discord.js";
 import getNoPermissionEmbed from "../utils/getNoPermissionEmbed";
-import { getGlobalConfig } from "../config";
+import { getFDGlobalConfig } from "../config";
 import CustomCommandOptions from "../types/CustomCommandOptions";
 
 export default function({interaction, handler, commandObj}: ValidationProps): boolean {
@@ -16,7 +16,7 @@ export default function({interaction, handler, commandObj}: ValidationProps): bo
    if (!interaction.member) return false;
    if (!interaction.inCachedGuild()) return false;
 
-   if (interaction.member.roles.cache.hasAny(...getGlobalConfig().rankCategories.commissioner_office)) {
+   if (interaction.member.roles.cache.hasAny(...getFDGlobalConfig().rankCategories.commissioner_office)) {
       return false;
    }
 
@@ -31,7 +31,7 @@ export default function({interaction, handler, commandObj}: ValidationProps): bo
          }
       break;
       case "HC":
-         neededRole = getGlobalConfig().rankCategories.high_command; 
+         neededRole = [...getFDGlobalConfig().rankCategories.high_command]; 
       break;
 
       default: 

@@ -11,7 +11,8 @@ import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
-   const config = getConfig(interaction) as IConfig;
+   const config = getConfig(interaction);
+   if (!config) return;
    if (!interaction.inCachedGuild()) return;
 
    const id = interaction.options.getString("id");
@@ -19,6 +20,11 @@ export default async function({interaction}: SlashCommandProps) {
    const document = await MActivityCheck.findOne({ID: id});
    if (!document) {
       await interaction.followUp({embeds: [getCommandFailedToRunEmbed("Activity Check not found.")]});
+      return;
+   }
+
+   if (document.guildID !== interaction.guild.id) {
+      await interaction.editReply({embeds: [getCommandFailedToRunEmbed("This activity check is from another server.")]});
       return;
    }
    
@@ -105,6 +111,7 @@ export default async function({interaction}: SlashCommandProps) {
                {name: "ID", value: document.ID},
                {name: "buttonID", value: document.buttonID},
                {name: "createdBy", value: document.createdBy},
+               {name: "guildID", value: document.guildID},
                {name: "Deadline", value: document.deadline + "\n" + `(${new Date(document.deadline).getTime()})`}
             )
             .setColor("Blurple")
