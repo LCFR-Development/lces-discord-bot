@@ -4,6 +4,7 @@ const config: IConfig = {
    guildID: "1261627826822447176",
    channels: {
       activityTest: "1262154276692689028",
+      shift: "1266302472809615360"
    },
    roles: {
       reactedToActivityTest: "1262170352038182992",
@@ -37,7 +38,7 @@ const config: IConfig = {
       high_ranks: "temp",
       low_command: "temp",
       high_command: "1262127012538093609",
-      commissioner_office: "temp"
+      commissioner_office: "1266302696856621129"
    }
 };
 

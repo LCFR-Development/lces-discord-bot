@@ -13,6 +13,7 @@ export interface IConfig {
     */
    channels: {
       activityTest: Snowflake,
+      shift: Snowflake
    }
    /**
     * Discord IDs of misc roles
