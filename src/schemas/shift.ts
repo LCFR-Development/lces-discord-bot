@@ -1,5 +1,6 @@
 import { Snowflake } from "discord.js";
 import { model, Schema } from "mongoose";
+import { Stations } from "../config/misc";
 
 export interface IShift {
    /**

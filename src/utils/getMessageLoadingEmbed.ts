@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import { IConfig } from "../config";
+import { IConfig, IEMSConfig, IFDConfig } from "../config";
 
 /**
  * 
@@ -7,7 +7,7 @@ import { IConfig } from "../config";
  * @param config The config for the server
  * @returns Embed ready to be sent
  */
-export default function(message: string, config: IConfig): EmbedBuilder {
+export default function(message: string, config: IEMSConfig | IFDConfig): EmbedBuilder {
    return new EmbedBuilder()
       .setDescription(`${config.emojis.loading} ${message}`)
       .setColor("Green")
