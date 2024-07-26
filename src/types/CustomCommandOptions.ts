@@ -8,7 +8,6 @@ export default interface CustomCommandOptions extends CommandOptions {
    requiredRoles?: {roles: Array<Snowflake>, areAllRequired?: boolean};
    /**
     * Makes the command not use category perms validation
-    * @deprecated Not made yet
     */
    skipCategoryPerms?: boolean;
 }

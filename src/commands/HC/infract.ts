@@ -2,15 +2,8 @@ import { SlashCommandBuilder, Snowflake } from "discord.js";
 
 import { SlashCommandProps } from "commandkit";
 import CustomCommandOptions from "../../types/CustomCommandOptions";
-import { configs } from "../../config";
-
-function getRequiredRoles() {
-   let temp: Array<Snowflake> = [];
-   for (const [,config] of configs) {
-      temp.push(config.rankCategories.high_command);
-   }
-   return temp;
-}
+import { getGlobalConfig } from "../../config";
+import { get } from "mongoose";
 
 export const data = new SlashCommandBuilder()
    .setName("infract")
@@ -26,5 +19,4 @@ export async function run({interaction, client}: SlashCommandProps) {
 }
 
 export const options: CustomCommandOptions = {
-   requiredRoles: {roles: getRequiredRoles(), areAllRequired: false}
 }

@@ -18,7 +18,7 @@ export interface IFDEmployee {
     * The employee's FM rank, -1 or none if not in the sub-division
     * @deprecated Not made yet
     */
-   fmRank?: FMRanks; //FIXME: Make required when it'll be done
+   fmRank?: FMRanks;
 }
 
 export const SFDEmployee = new Schema<IFDEmployee>({
@@ -29,10 +29,3 @@ export const SFDEmployee = new Schema<IFDEmployee>({
 });
 
 export const MFDEmployee = model<IFDEmployee>("Fire-Department-Employees", SFDEmployee);
-
-const stuff: IFDEmployee = {
-   ID: "test",
-   callsign: "test",
-   rank: 1,
-   fmRank: -1
-}

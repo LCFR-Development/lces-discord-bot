@@ -2,17 +2,9 @@ import { SlashCommandBuilder, Snowflake, GuildMember } from "discord.js";
 
 import { SlashCommandProps } from "commandkit";
 import CustomCommandOptions from "../../types/CustomCommandOptions";
-import { configs, getConfig } from "../../config";
+import { getConfig, getGlobalConfig } from "../../config";
 import { IConfig } from '../../config/index.ts'
 import getCommandFailedToRunEmbed from "../../utils/getCommandFailedToRunEmbed.ts";
-
-function getRequiredRoles() {
-    let temp: Array<Snowflake> = [];
-    for (const [,config] of configs) {
-       temp.push(config.rankCategories.high_command);
-    }
-    return temp;
-}
 
 export const data = new SlashCommandBuilder()
    .setName("demote")
@@ -44,5 +36,4 @@ export async function run({interaction, client}: SlashCommandProps) {
 }
 
 export const options: CustomCommandOptions = {
-   requiredRoles: {roles: getRequiredRoles(), areAllRequired: false}
 }
