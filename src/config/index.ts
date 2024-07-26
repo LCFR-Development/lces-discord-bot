@@ -24,6 +24,12 @@ export interface IConfig {
        * The activity test main string
        */
       ACMainMsg: string;
+   },
+   /**
+    * URLs for images
+    */
+   images: {
+      shiftImage: string;
    }
    /**
     * Discord IDs of channels

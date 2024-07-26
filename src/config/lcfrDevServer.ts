@@ -9,7 +9,7 @@ const config: IFDConfig = {
    },
    texts: {
       deptName: "LCDS",
-      ACMainMsg: "The LCFR High Command team has decided to host an activity check. Please press the button below to let the HC team know you are active. Not reacting will result in punishment."
+      ACMainMsg: "The LCFR High Command team has decided to host an activity check. Please press the button below to let the HC team know you are active. Not reacting will result in punishment.",
    },
    roles: {
       reactedToActivityTest: "1262170352038182992",
@@ -18,6 +18,9 @@ const config: IFDConfig = {
    },
    emojis: {
       loading: "<a:Loading:1262459581477556315>",
+   },
+   images: {
+      shiftImage: "https://cdn.discordapp.com/attachments/1182324323109834773/1182782882377383946/New_Project_9.png?ex=66a55a66&is=66a408e6&hm=6169446a7076e774d8e4f2816d9d2f03444db8997aedc766995d4aafc0cb7a5d&",
    },
    ranks: {
       probationary_firefighter: "temp",
