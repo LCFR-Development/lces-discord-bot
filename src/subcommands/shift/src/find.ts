@@ -23,6 +23,11 @@ export default async function({interaction}: SlashCommandProps) {
       return;
    }
 
+   if (document.guild !== interaction.guild.id) {
+      await interaction.editReply({embeds: [getCommandFailedToRunEmbed("This shift is not in this server.")]});
+      return;
+   }
+
    const shiftDateTimestamp = Math.floor((new Date(document.time).getTime())/1000);
 
    let shiftEmbed: EmbedBuilder;

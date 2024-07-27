@@ -13,7 +13,7 @@ export default async function({interaction}: SlashCommandProps) {
    
    const config = getConfig(interaction);
    if (!config) return;
-   
+
    await interaction.editReply({embeds: [getMessageLoadingEmbed("Creating shift...", config)]});
 
    const shiftsChannel = await interaction.guild.channels.fetch(config.channels.shift);
@@ -24,6 +24,7 @@ export default async function({interaction}: SlashCommandProps) {
    const document = await MShift.create({
       ID: shiftID,
       host: interaction.user.id,
+      guild: interaction.guild.id,
       isDaily: true,
       time: new Date(Date.now())
    })

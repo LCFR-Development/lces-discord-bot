@@ -32,6 +32,7 @@ export default async function({interaction}: SlashCommandProps) {
    const document = await MShift.create({
       ID: shiftID,
       host: interaction.user.id,
+      guild: interaction.guild.id,
       isDaily: false,
       time: new Date(Date.now())
    })

@@ -12,6 +12,10 @@ export interface IShift {
     */
    host: Snowflake;
    /**
+    * Discord ID of the guild the shift is in.
+    */
+   guild: Snowflake;
+   /**
     * Is this a daily shift
     */
    isDaily: boolean;
@@ -29,6 +33,7 @@ export interface IShift {
 export const SShift = new Schema<IShift>({
    ID: {type: String, required: true},
    host: {type: String, required: true},
+   guild: {type: String, required: true},
    isDaily: {type: Boolean, required: true},
    employeesAttended: {type: [{type: String, required: true}], default: []},
    time: {type: String, required: true}

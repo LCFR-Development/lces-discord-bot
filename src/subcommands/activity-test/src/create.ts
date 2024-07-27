@@ -66,7 +66,7 @@ export default async function({interaction}: SlashCommandProps) {
          config.texts.ACMainMsg + "\n\n" +
          `Time limit: <t:${deadlineTimeStamp}:R>`
       )
-      .setFooter({text: `AC ID: ${activityTestID}`})
+      .setFooter({text: `${activityTestID}`})
       .setColor(0x9e0000);
 
    const channel = await interaction.client.channels.fetch(config.channels.activityTest);
