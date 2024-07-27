@@ -19,6 +19,15 @@ export const data = new SlashCommandBuilder()
          .setDescription("Post a daily shift to the shifts channel.")
       )
    )
+   .addSubcommand(s => s
+      .setName("find")
+      .setDescription("Find a shift by ID.")
+      .addStringOption(s => s
+         .setName("id")
+         .setDescription("The ID of the shift.")
+         .setRequired(true)
+      )
+   )
 
 export async function run({client, handler, interaction}: SlashCommandProps) {
    const subcommandGroup = interaction.options.getSubcommandGroup();
@@ -28,6 +37,10 @@ export async function run({client, handler, interaction}: SlashCommandProps) {
       switch (subcommand) {
          case "normal": subcommands.post.normal({interaction, handler, client}); break;
          case "daily": subcommands.post.daily({interaction, handler, client}); break;
+      }
+   } else if (subcommandGroup === null) {
+      switch (subcommand) {
+         case "find": subcommands.find({interaction, handler, client}); break;
       }
    }
 }
