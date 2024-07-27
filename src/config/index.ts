@@ -100,6 +100,76 @@ export interface IFDConfig extends IConfig {
    };
 }
 
+export class FDConfig implements IFDConfig {
+   type: "fd";
+   ranks: { probationary_firefighter: Snowflake; firefighter: Snowflake; senior_firefighter: Snowflake; advanced_firefighter: Snowflake; engineer: Snowflake; lieutenant: Snowflake; captain: Snowflake; senior_captain: Snowflake; safety_officer: Snowflake; battalion_chief: Snowflake; station_officer: Snowflake; district_supervisor: Snowflake; district_chief: Snowflake; assistant_commissioner: Snowflake; deputy_commissioner: Snowflake; commissioner: Snowflake; };
+   rankCategories: { trainee_rank: Snowflake; low_ranks: Snowflake; high_ranks: Snowflake; low_command: Snowflake; high_command: Snowflake; commissioner_office: Snowflake; };
+   guildID: string;
+   texts: {
+      /**
+       * The main dept. name (eg. LCFR), used in eg. Shift and Activity Check embeds.
+       */
+      deptName: string;
+      /**
+       * The activity test main string
+       */
+      ACMainMsg: string;
+   };
+   images: { shiftImage: string; };
+   channels: { activityTest: Snowflake; shift: Snowflake; };
+   roles: { reactedToActivityTest: Snowflake; loaRole: Snowflake; employeeRole: Snowflake; };
+   emojis: { loading: string; };
+
+   constructor() {
+      this.guildID = "";
+      this.type = "fd";
+      this.texts = {
+         ACMainMsg: "",
+         deptName: "",
+      };
+      this.images = {
+         shiftImage: "",
+      };
+      this.channels = {
+         activityTest: "",
+         shift: "",
+      };
+      this.roles = {
+         reactedToActivityTest: "",
+         loaRole: "",
+         employeeRole: "",
+      };
+      this.emojis = {
+         loading: "",
+      };
+      this.ranks = {
+         probationary_firefighter: "",
+         firefighter: "",
+         senior_firefighter: "",
+         advanced_firefighter: "",
+         engineer: "",
+         lieutenant: "",
+         captain: "",
+         senior_captain: "",
+         safety_officer: "",
+         battalion_chief: "",
+         station_officer: "",
+         district_supervisor: "",
+         district_chief: "",
+         assistant_commissioner: "",
+         deputy_commissioner: "",
+         commissioner: "",
+      };
+      this.rankCategories = {
+         trainee_rank: "",
+         low_ranks: "",
+         high_ranks: "",
+         low_command: "",
+         high_command: "",
+         commissioner_office: "",
+      };
+   }
+}
 export interface IGlobalConfig {
    /**
     * Arrays of misc role IDs from all servers
@@ -146,6 +216,46 @@ export interface IFDGlobalConfig extends IGlobalConfig {
    };
 }
 
+class FDGlobalConfig implements IFDGlobalConfig {
+   ranks: { probationary_firefighter: Array<Snowflake>; firefighter: Array<Snowflake>; senior_firefighter: Array<Snowflake>; advanced_firefighter: Array<Snowflake>; engineer: Array<Snowflake>; lieutenant: Array<Snowflake>; captain: Array<Snowflake>; senior_captain: Array<Snowflake>; safety_officer: Array<Snowflake>; battalion_chief: Array<Snowflake>; station_officer: Array<Snowflake>; district_supervisor: Array<Snowflake>; district_chief: Array<Snowflake>; assistant_commissioner: Array<Snowflake>; deputy_commissioner: Array<Snowflake>; commissioner: Array<Snowflake>; };
+   rankCategories: { trainee_rank: Array<Snowflake>; low_ranks: Array<Snowflake>; high_ranks: Array<Snowflake>; low_command: Array<Snowflake>; high_command: Array<Snowflake>; commissioner_office: Array<Snowflake>; };
+   roles: { reactedToActivityTest: Array<Snowflake>; loaRole: Array<Snowflake>; employeeRole: Array<Snowflake>; };
+
+   constructor() {
+      this.roles = {
+         employeeRole: [],
+         loaRole: [],
+         reactedToActivityTest: [],
+      };
+      this.ranks = {
+         probationary_firefighter: [],
+         firefighter: [],
+         senior_firefighter: [],
+         advanced_firefighter: [],
+         engineer: [],
+         lieutenant: [],
+         captain: [],
+         senior_captain: [],
+         safety_officer: [],
+         battalion_chief: [],
+         station_officer: [],
+         district_supervisor: [],
+         district_chief: [],
+         assistant_commissioner: [],
+         deputy_commissioner: [],
+         commissioner: [],
+      };
+      this.rankCategories = {
+         trainee_rank: [],
+         low_ranks: [],
+         high_ranks: [],
+         low_command: [],
+         high_command: [],
+         commissioner_office: [],
+      };
+   }
+}
+
 export interface IEMSGlobalConfig extends IGlobalConfig {
 
 }
@@ -183,39 +293,7 @@ export function instanceOfEMSConfig(config: IFDConfig | IEMSConfig): config is I
  * @returns Config from all servers.
  */
 export function getFDGlobalConfig(): IFDGlobalConfig {
-   let globalConfig: IFDGlobalConfig = {
-      rankCategories: {
-         commissioner_office: [],
-         high_command: [],
-         high_ranks: [],
-         low_command: [],
-         low_ranks: [],
-         trainee_rank: []
-      }, 
-      ranks: {
-         probationary_firefighter: [],
-         firefighter: [],
-         senior_firefighter: [],
-         advanced_firefighter: [],
-         engineer: [],
-         lieutenant: [],
-         captain: [],
-         senior_captain: [],
-         safety_officer: [],
-         battalion_chief: [],
-         station_officer: [],
-         district_supervisor: [],
-         district_chief: [],
-         assistant_commissioner: [],
-         deputy_commissioner: [],
-         commissioner: []
-      },
-      roles: {
-         employeeRole: [],
-         loaRole: [],
-         reactedToActivityTest: [],
-      }
-   };
+   let globalConfig: IFDGlobalConfig = new FDGlobalConfig();
 
    for (const [,config] of configsCollection) {
       if (!instanceOfFDConfig(config)) continue;
