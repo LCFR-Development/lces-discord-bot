@@ -13,6 +13,7 @@
   "type": "module",
   "dependencies": {
     "@lukeed/ms": "^2.0.2",
+    "axios": "^1.7.2",
     "commandkit": "^0.1.10",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
