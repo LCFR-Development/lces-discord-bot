@@ -17,14 +17,19 @@ export interface IEmployee {
    /**
     * Departments that the employee is in
     */
-   departments: {FD: boolean, EMS: boolean};
+   departments: {
+      FD: boolean, 
+      EMS: boolean,
+      FM: boolean
+      FAVFD: boolean
+   };
 };
 
 export const SEmployee = new Schema<IEmployee>({
    ID: {type: String, required: true}, // Our UUID for them
    discordID: {type: String, required: true},
    robloxID: {type: Number, required: true},
-   departments: {FD: {type: Boolean, default: false}, EMS: {type: Boolean, default: false}},
+   departments: {FD: {type: Boolean, default: false}, EMS: {type: Boolean, default: false}, FM: {type: Boolean, default: false}, FAVFD: {type: Boolean, default: false}},
 });
 
 export const MEmployee = model<IEmployee>("employees", SEmployee);
