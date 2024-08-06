@@ -13,7 +13,7 @@ export default async function({interaction}: SlashCommandProps) {
    const config = getConfig(interaction);
    if (!config) return;
 
-   await interaction.editReply({embeds: [getMessageLoadingEmbed("Finding shift...", config)]});
+   await interaction.editReply({embeds: [getMessageLoadingEmbed("Finding shift...")]});
 
    const id = interaction.options.getString("id");
 

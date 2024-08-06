@@ -110,17 +110,3 @@ export function getFDRankInfo(rank: FDRanks, guildID: Snowflake): FDRank | undef
    const FDRankReady: FDRank = {rank, rankCategory, rankCategoryID, rankID};
    return FDRankReady;
 }
-
-export enum FMRanks {
-   none = -1, // Not in FM
-   probationary_fire_marshal,
-   junior_fire_marshal,
-   fire_marshal,
-   senior_fire_marshal,
-   supervisor_fire_marshal,
-   assistant_head_fire_marshal,
-   deputy_head_fire_marshal,
-   head_fire_marshal
-}
-
-//TODO: The same thing as getFdRankInfo() and the functions above but for FM

@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { FDRanks, FMRanks } from "../../config/ranks/fdRanks";
+import { FDRanks } from "../../config/ranks/fdRanks";
 
 export interface IFDEmployee {
    /**

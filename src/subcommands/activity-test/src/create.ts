@@ -18,7 +18,7 @@ export default async function({interaction}: SlashCommandProps) {
 
    if (!interaction.inCachedGuild()) return;
 
-   await interaction.editReply({embeds: [getMessageLoadingEmbed("Preparing activity check...", config)]});
+   await interaction.editReply({embeds: [getMessageLoadingEmbed("Preparing activity check...")]});
 
    for (const [,member] of (await interaction.guild.roles.fetch(config.roles.reactedToActivityTest))!.members) {
       if (member.roles.cache.has(config.roles.reactedToActivityTest)) {

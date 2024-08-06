@@ -10,7 +10,7 @@ import { IFDEmployee, MFDEmployee } from "../../../../schemas/employees/fdEmploy
 import { IEmployee, MEmployee } from "../../../../schemas/employees/employee";
 import { v4 as uuid } from 'uuid';
 import getIsFDCallsignFree from "../../../../utils/getIsFDCallsignFree";
-import { FDRanks, FMRanks } from "../../../../config/ranks/fdRanks";
+import { FDRanks } from "../../../../config/ranks/fdRanks";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
@@ -25,7 +25,7 @@ export default async function({interaction}: SlashCommandProps) {
    const config = getConfig(interaction);
    if (!config) return;
 
-   await interaction.editReply({embeds: [getMessageLoadingEmbed("Creating the employee...", config)]});
+   await interaction.editReply({embeds: [getMessageLoadingEmbed("Creating the employee...")]});
 
    try {
 
@@ -58,8 +58,12 @@ export default async function({interaction}: SlashCommandProps) {
             ID: employeeID,
             discordID: user.id,
             robloxID: robloxUser.id,
-            departments: {FD: true, EMS: false} as IEmployee["departments"],
+            departments: {FD: true, EMS: false, FM: false, FAVFD: false} as IEmployee["departments"],
          });
+      } else {
+         let departments = mainEmployeeDocument.departments;
+         departments.FD = true;
+         await MEmployee.updateOne({ID: mainEmployeeDocument.ID}, {$set: {departments}}); 
       }
       
       if (mainEmployeeDocument?.departments.FD) {
@@ -73,15 +77,12 @@ export default async function({interaction}: SlashCommandProps) {
          rank: rank,
       });
 
-      if (!fdEmployeeDocument.fmRank) return;
-
       const replyEmbed = new EmbedBuilder()
          .setTitle(`Created employee:`)
          .setDescription(
             `Employee ID: ${fdEmployeeDocument.ID}\n` +
             `Callsign: ${fdEmployeeDocument.callsign}\n` +
-            `Rank: ${FDRanks[fdEmployeeDocument.rank]}\n` +
-            `FM Rank: ${FMRanks[fdEmployeeDocument.fmRank]}`
+            `Rank: ${FDRanks[fdEmployeeDocument.rank]}\n`
          )
          .setColor(0x9e0000);
 

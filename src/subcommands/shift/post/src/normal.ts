@@ -14,7 +14,7 @@ export default async function({interaction}: SlashCommandProps) {
    const config = getConfig(interaction);
    if (!config) return;
    
-   await interaction.editReply({embeds: [getMessageLoadingEmbed("Creating shift...", config)]})
+   await interaction.editReply({embeds: [getMessageLoadingEmbed("Creating shift...")]})
 
    const shiftID = uuid();
 

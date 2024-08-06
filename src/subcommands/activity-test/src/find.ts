@@ -58,7 +58,7 @@ export default async function({interaction}: SlashCommandProps) {
    inactiveButton.onClick(
       async (subInteraction: ButtonInteraction) => {
          await subInteraction.deferReply({ephemeral: true});
-         await subInteraction.editReply({embeds: [getMessageLoadingEmbed("Getting members...", config)]});
+         await subInteraction.editReply({embeds: [getMessageLoadingEmbed("Getting members...")]});
 
          const membersOnLoa: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.loaRole))?.members ?? new Collection();
          const reactedMembers: Collection<Snowflake, GuildMember> = new Collection();
