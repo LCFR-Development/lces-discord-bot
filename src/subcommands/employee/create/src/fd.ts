@@ -10,7 +10,7 @@ import { IFDEmployee, MFDEmployee } from "../../../../schemas/employees/fdEmploy
 import { IEmployee, MEmployee } from "../../../../schemas/employees/employee";
 import { v4 as uuid } from 'uuid';
 import getIsFDCallsignFree from "../../../../utils/getIsFDCallsignFree";
-import { FDRanks, FMRanks } from "../../../../config/fdRanks";
+import { FDRanks, FMRanks } from "../../../../config/ranks/fdRanks";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
