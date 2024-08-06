@@ -11,7 +11,7 @@ export interface IConfig {
    /**
     * Used for type checks
     */
-   readonly type: "fd" | "ems";
+   readonly type: "fd" | "ems" | "favfd";
    /**
     * Texts in command responces
     */
@@ -50,9 +50,16 @@ export interface IConfig {
     * Markdown of emojis
     */
    emojis: {
-      loading: string;
+      
    };
 } 
+
+export interface IFAVFDConfig extends IConfig {
+   /**
+    * Used for type checks
+    */
+   readonly type: "favfd";
+}
 
 export interface IEMSConfig extends IConfig {
    /**
@@ -101,25 +108,15 @@ export interface IFDConfig extends IConfig {
 }
 
 export class FDConfig implements IFDConfig {
-   type: "fd";
-   ranks: { probationary_firefighter: Snowflake; firefighter: Snowflake; senior_firefighter: Snowflake; advanced_firefighter: Snowflake; engineer: Snowflake; lieutenant: Snowflake; captain: Snowflake; senior_captain: Snowflake; safety_officer: Snowflake; battalion_chief: Snowflake; station_officer: Snowflake; district_supervisor: Snowflake; district_chief: Snowflake; assistant_commissioner: Snowflake; deputy_commissioner: Snowflake; commissioner: Snowflake; };
-   rankCategories: { trainee_rank: Snowflake; low_ranks: Snowflake; high_ranks: Snowflake; low_command: Snowflake; high_command: Snowflake; commissioner_office: Snowflake; };
-   guildID: string;
-   texts: {
-      /**
-       * The main dept. name (eg. LCFR), used in eg. Shift and Activity Check embeds.
-       */
-      deptName: string;
-      /**
-       * The activity test main string
-       */
-      ACMainMsg: string;
-   };
-   images: { shiftImage: string; };
-   channels: { activityTest: Snowflake; shift: Snowflake; };
-   roles: { reactedToActivityTest: Snowflake; loaRole: Snowflake; employeeRole: Snowflake; };
-   emojis: { loading: string; };
-
+   readonly type: "fd";
+   ranks: IFDConfig["ranks"];
+   rankCategories: IFDConfig["rankCategories"];
+   guildID: IFDConfig["guildID"];
+   texts: IFDConfig["texts"];
+   images: IFDConfig["images"];
+   channels: IFDConfig["channels"];
+   roles: IFDConfig["roles"];
+   emojis: IFDConfig["emojis"];
    constructor() {
       this.guildID = "";
       this.type = "fd";
@@ -140,7 +137,7 @@ export class FDConfig implements IFDConfig {
          employeeRole: "",
       };
       this.emojis = {
-         loading: "",
+
       };
       this.ranks = {
          probationary_firefighter: "",
@@ -170,6 +167,16 @@ export class FDConfig implements IFDConfig {
       };
    }
 }
+
+export interface IBotConfig {
+   /**
+    * Markdown of emojis
+    */
+   emojis: {
+      loading: string;
+   }
+}
+
 export interface IGlobalConfig {
    /**
     * Arrays of misc role IDs from all servers
@@ -216,10 +223,10 @@ export interface IFDGlobalConfig extends IGlobalConfig {
    };
 }
 
-class FDGlobalConfig implements IFDGlobalConfig {
-   ranks: { probationary_firefighter: Array<Snowflake>; firefighter: Array<Snowflake>; senior_firefighter: Array<Snowflake>; advanced_firefighter: Array<Snowflake>; engineer: Array<Snowflake>; lieutenant: Array<Snowflake>; captain: Array<Snowflake>; senior_captain: Array<Snowflake>; safety_officer: Array<Snowflake>; battalion_chief: Array<Snowflake>; station_officer: Array<Snowflake>; district_supervisor: Array<Snowflake>; district_chief: Array<Snowflake>; assistant_commissioner: Array<Snowflake>; deputy_commissioner: Array<Snowflake>; commissioner: Array<Snowflake>; };
-   rankCategories: { trainee_rank: Array<Snowflake>; low_ranks: Array<Snowflake>; high_ranks: Array<Snowflake>; low_command: Array<Snowflake>; high_command: Array<Snowflake>; commissioner_office: Array<Snowflake>; };
-   roles: { reactedToActivityTest: Array<Snowflake>; loaRole: Array<Snowflake>; employeeRole: Array<Snowflake>; };
+export class FDGlobalConfig implements IFDGlobalConfig {
+   ranks: IFDGlobalConfig["ranks"];
+   rankCategories: IFDGlobalConfig["rankCategories"];
+   roles: IFDGlobalConfig["roles"];
 
    constructor() {
       this.roles = {
@@ -260,29 +267,48 @@ export interface IEMSGlobalConfig extends IGlobalConfig {
 
 }
 
-const configsCollection: Collection<Snowflake, IFDConfig | IEMSConfig> = new Collection();
+export class EMSGlobalConfig implements IEMSGlobalConfig {
+   roles: IEMSGlobalConfig["roles"];
+
+   constructor() {
+      this.roles = {
+         employeeRole: [],
+         loaRole: [],
+         reactedToActivityTest: [],
+      }
+   }
+}
+
+const configsCollection: Collection<Snowflake, IFDConfig | IEMSConfig | IFAVFDConfig> = new Collection();
 
 // configsCollection.set(lcfr.guildID, lcfr);
 configsCollection.set(lcfrDevServer.guildID, lcfrDevServer);
 
-export function getConfig(interaction: Interaction): IFDConfig | IEMSConfig | undefined {
+export function getConfig(interaction: Interaction): IFDConfig | IEMSConfig | IFAVFDConfig | undefined {
    if (!interaction.guildId) return undefined;
    return configsCollection.get(interaction.guildId);
 }
 
-export function getConfigByID(id: Snowflake): IFDConfig | IEMSConfig | undefined {
+export function getConfigByID(id: Snowflake): IFDConfig | IEMSConfig | IFAVFDConfig | undefined {
    return configsCollection.get(id);
 }
 
-export function instanceOfFDConfig(config: IFDConfig | IEMSConfig): config is IFDConfig {
+export function instanceOfFDConfig(config: IFDConfig | IEMSConfig | IFAVFDConfig): config is IFDConfig {
    if (config.type === "fd") {
       return true;
    }
    return false;
 }
 
-export function instanceOfEMSConfig(config: IFDConfig | IEMSConfig): config is IEMSConfig {
+export function instanceOfEMSConfig(config: IFDConfig | IEMSConfig | IFAVFDConfig): config is IEMSConfig {
    if (config.type === "ems") {
+      return true;
+   }
+   return false;
+}
+
+export function instanceOfFAVFDConfig(config: IFDConfig | IEMSConfig | IFAVFDConfig): config is IFAVFDConfig {
+   if (config.type === "favfd") {
       return true;
    }
    return false;
@@ -312,13 +338,7 @@ export function getFDGlobalConfig(): IFDGlobalConfig {
 }
 
 export function getEMSGlobalConfig(): IEMSGlobalConfig {
-   let globalConfig: IEMSGlobalConfig = {
-      roles: {
-         employeeRole: [],
-         loaRole: [],
-         reactedToActivityTest: [],
-      }
-   };
+   let globalConfig: IEMSGlobalConfig = new EMSGlobalConfig();
 
    for (const [,config] of configsCollection) {
       if (!instanceOfEMSConfig(config)) continue;

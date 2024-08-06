@@ -1,5 +1,5 @@
 import { Snowflake } from "discord.js";
-import { getConfig, getConfigByID, IConfig, instanceOfFDConfig } from './index';
+import { getConfig, getConfigByID, IConfig, instanceOfFDConfig } from '../index';
 
 export enum FDRanks {
    probationary_firefighter,
