@@ -19,6 +19,10 @@ export interface IInfraction {
     */
    employeeID: Snowflake,
    /**
+    * The ID of the guild that the infraction is in.
+    */
+   guildID: Snowflake,
+   /**
     * The infraction (ex. strike)
     */
    infraction: Infraction,
