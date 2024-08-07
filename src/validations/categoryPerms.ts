@@ -8,10 +8,9 @@ import CustomCommandOptions from "../types/CustomCommandOptions";
 export default function({interaction, handler, commandObj}: ValidationProps): boolean {
    if (!commandObj.category) return false;
    const commandCategory: CommandCategories = commandObj.category as CommandCategories;
-   if (!commandObj.options) return false;
-   const commandOptions: CustomCommandOptions = commandObj.options;
+   const commandOptions: CustomCommandOptions | undefined = commandObj.options;
 
-   if (commandOptions.skipCategoryPerms) return false;
+   if (commandOptions?.skipCategoryPerms) return false;
    
    if (!interaction.member) return false;
    if (!interaction.inCachedGuild()) return false;
@@ -32,6 +31,10 @@ export default function({interaction, handler, commandObj}: ValidationProps): bo
       break;
       case "HC":
          neededRole = [...getFDGlobalConfig().rankCategories.high_command]; 
+      break;
+
+      case "apps":
+         neededRole = [...getFDGlobalConfig().roles.appReader]; 
       break;
 
       default: 
