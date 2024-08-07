@@ -5,7 +5,8 @@ const config: IFDConfig = {
    type: "fd",
    channels: {
       activityTest: "1262154276692689028",
-      shift: "1266302472809615360"
+      shift: "1266302472809615360",
+      appResults: "1270684375427715135"
    },
    texts: {
       deptName: "LCDS",
@@ -14,16 +15,20 @@ const config: IFDConfig = {
    roles: {
       reactedToActivityTest: "1262170352038182992",
       loaRole: "1262378282146332713",
-      employeeRole: "1262425657518854236"
+      employeeRole: "1262425657518854236",
+      appReader: "1270714251715280896"
    },
    emojis: {
 
+   },
+   colors: {
+      mainEmbedColor: "DarkRed",
    },
    images: {
       shiftImage: "https://cdn.discordapp.com/attachments/1182324323109834773/1182782882377383946/New_Project_9.png?ex=66a55a66&is=66a408e6&hm=6169446a7076e774d8e4f2816d9d2f03444db8997aedc766995d4aafc0cb7a5d&",
    },
    ranks: {
-      probationary_firefighter: "temp",
+      probationary_firefighter: "1270701311435735110",
       firefighter: "temp",
       senior_firefighter: "temp",
       advanced_firefighter: "temp",
@@ -41,7 +46,7 @@ const config: IFDConfig = {
       commissioner: "temp"
    },
    rankCategories: {
-      trainee_rank: "temp",
+      trainee_rank: "1270701271346712629",
       low_ranks: "temp",
       high_ranks: "temp",
       low_command: "temp",

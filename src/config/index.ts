@@ -1,4 +1,4 @@
-import { Collection, Interaction, Snowflake } from "discord.js";
+import { Collection, ColorResolvable, Interaction, Snowflake } from "discord.js";
 
 // import lcfr from "./lcfr";
 import lcfrDevServer from "./lcfrDevServer";
@@ -36,7 +36,8 @@ export interface IConfig {
     */
    channels: {
       activityTest: Snowflake,
-      shift: Snowflake
+      shift: Snowflake,
+      appResults: Snowflake
    }
    /**
     * Discord IDs of misc roles
@@ -45,7 +46,14 @@ export interface IConfig {
       reactedToActivityTest: Snowflake;
       loaRole: Snowflake;
       employeeRole: Snowflake;
+      appReader: Snowflake;
    };
+   /**
+    * Colors for different things
+    */
+   colors: {
+      mainEmbedColor: ColorResolvable;
+   }
    /**
     * Markdown of emojis
     */
@@ -114,6 +122,7 @@ export class FDConfig implements IFDConfig {
    guildID: IFDConfig["guildID"];
    texts: IFDConfig["texts"];
    images: IFDConfig["images"];
+   colors: IFDConfig["colors"];
    channels: IFDConfig["channels"];
    roles: IFDConfig["roles"];
    emojis: IFDConfig["emojis"];
@@ -130,14 +139,19 @@ export class FDConfig implements IFDConfig {
       this.channels = {
          activityTest: "",
          shift: "",
+         appResults: "",
       };
       this.roles = {
          reactedToActivityTest: "",
          loaRole: "",
          employeeRole: "",
+         appReader: "",
       };
       this.emojis = {
 
+      };
+      this.colors = {
+         mainEmbedColor: "Default",
       };
       this.ranks = {
          probationary_firefighter: "",
@@ -185,6 +199,7 @@ export interface IGlobalConfig {
       reactedToActivityTest: Array<Snowflake>;
       loaRole: Array<Snowflake>;
       employeeRole: Array<Snowflake>;
+      appReader: Array<Snowflake>;
    };
 }
 
@@ -233,6 +248,7 @@ export class FDGlobalConfig implements IFDGlobalConfig {
          employeeRole: [],
          loaRole: [],
          reactedToActivityTest: [],
+         appReader: [],
       };
       this.ranks = {
          probationary_firefighter: [],
@@ -275,6 +291,7 @@ export class EMSGlobalConfig implements IEMSGlobalConfig {
          employeeRole: [],
          loaRole: [],
          reactedToActivityTest: [],
+         appReader: [],
       }
    }
 }

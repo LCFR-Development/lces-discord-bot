@@ -1,4 +1,4 @@
-export type CommandCategories = "devOnly" | "HC";
+export type CommandCategories = "devOnly" | "HC" | "apps";
 
 export enum Stations {
    None = -1,
