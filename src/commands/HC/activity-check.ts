@@ -9,10 +9,6 @@ export const data = new SlashCommandBuilder()
    .setName("activity-check")
    .setDescription("Make an activity check.")
    .addSubcommand(s => s
-      .setName("prepare")
-      .setDescription("Prepare the activity check.")
-   )
-   .addSubcommand(s => s
       .setName("create")
       .setDescription("Create an activity check.")
       .addStringOption(o => o
@@ -45,14 +41,11 @@ export const data = new SlashCommandBuilder()
    )
 
 export async function run({interaction, client, handler}: SlashCommandProps) {
-   type Subcommands = "prepare" | "create" | "clear" | "find" | "resend"; 
+   type Subcommands = "create" | "clear" | "find" | "resend"; 
 
    const subcommand: Subcommands = interaction.options.getSubcommand() as Subcommands;
 
    switch (subcommand) {
-      case "prepare":
-         subcommands.prepare({interaction, client, handler});
-      break;
       case "create":
          await subcommands.create({interaction, client, handler});
       break;

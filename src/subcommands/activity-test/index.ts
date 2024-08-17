@@ -5,7 +5,6 @@ import resend from "./src/resend";
 
 export default {
    create: create,
-   prepare: prepare,
    clear: prepare,
    find: find,
    resend
