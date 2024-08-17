@@ -1,6 +1,7 @@
 import { Interaction } from "discord.js";
 import divisions from "../../autocomplete-src/apps-send-results/divisions";
 import rank from "../../autocomplete-src/employee-create/rank";
+import rankAfter from "../../autocomplete-src/promote/rank-after";
 
 export default function(interaction: Interaction) {
    if (!interaction.isAutocomplete()) return;
@@ -20,6 +21,12 @@ export default function(interaction: Interaction) {
                rank(interaction);
             }
          }
+      }
+   }
+
+   if (interaction.commandName === "promote") {
+      if (interaction.options.getFocused(true).name === "rank-after") {
+         rankAfter(interaction);
       }
    }
 }
