@@ -1,7 +1,8 @@
 import { Interaction } from "discord.js";
 import divisions from "../../autocomplete-src/apps-send-results/divisions";
 import rank from "../../autocomplete-src/employee-create/rank";
-import rankAfter from "../../autocomplete-src/promote/rank-after";
+import promoteRankAfter from "../../autocomplete-src/promote/rank-after";
+import demoteRankAfter from "../../autocomplete-src/demote/rank-after";
 
 export default function(interaction: Interaction) {
    if (!interaction.isAutocomplete()) return;
@@ -26,7 +27,13 @@ export default function(interaction: Interaction) {
 
    if (interaction.commandName === "promote") {
       if (interaction.options.getFocused(true).name === "rank-after") {
-         rankAfter(interaction);
+         promoteRankAfter(interaction);
+      }
+   }
+
+   if (interaction.commandName === "demote") {
+      if (interaction.options.getFocused(true).name === "rank-after") {
+         promoteRankAfter(interaction);
       }
    }
 }

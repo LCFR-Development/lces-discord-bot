@@ -23,7 +23,7 @@ function getMainEmbedDescription(employee: GuildMember, rankBefore: string, rank
 
 function getDMEmbedDescription(promotionsChannelID: Snowflake, deptName: string) {
    const res: string =
-      `You have been promoted to ${deptName}!\n` + 
+      `You have been promoted in ${deptName}!\n` + 
       `Check <#${promotionsChannelID}> for more information.`;
    return res;
 }
@@ -111,11 +111,11 @@ export async function run({interaction, client}: SlashCommandProps) {
 
       const rankAfterEnum: FDRanks | undefined = FDRanks[rankAfterPlain as keyof typeof FDRanks];
       const rankBeforeEnum: FDRanks | undefined = getFDRankFromDBAsEnum(FDEmployeeDocument.rank);
-      if (!rankAfterEnum) {
+      if (rankAfterEnum === undefined) {
          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("Invalid rank.")]});
          return;
       }
-      if (!rankBeforeEnum) {
+      if (rankBeforeEnum === undefined) {
          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("There was an error while executing this command.")]});
          return;
       }

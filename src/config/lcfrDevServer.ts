@@ -7,7 +7,8 @@ const config: IFDConfig = {
       activityTest: "1262154276692689028",
       shift: "1266302472809615360",
       appResults: "1270684375427715135",
-      promotions: "1274778238287216650"
+      promotions: "1274778238287216650",
+      demotions: "1274795698159616132"
    },
    texts: {
       deptName: "LCDS",
