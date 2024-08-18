@@ -37,7 +37,8 @@ export interface IConfig {
    channels: {
       activityTest: Snowflake,
       shift: Snowflake,
-      appResults: Snowflake
+      appResults: Snowflake,
+      promotions: Snowflake
    }
    /**
     * Discord IDs of misc roles
@@ -140,6 +141,7 @@ export class FDConfig implements IFDConfig {
          activityTest: "",
          shift: "",
          appResults: "",
+         promotions: "",
       };
       this.roles = {
          reactedToActivityTest: "",

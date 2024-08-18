@@ -6,7 +6,8 @@ const config: IFDConfig = {
    channels: {
       activityTest: "1262154276692689028",
       shift: "1266302472809615360",
-      appResults: "1270684375427715135"
+      appResults: "1270684375427715135",
+      promotions: "1274778238287216650"
    },
    texts: {
       deptName: "LCDS",
