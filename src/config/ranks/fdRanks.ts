@@ -29,7 +29,7 @@ export enum FDRankCategories {
    commissioner_office
 }
 
-interface FDRank {
+export interface FDRank {
    /**
     * The rank as an enum
     */

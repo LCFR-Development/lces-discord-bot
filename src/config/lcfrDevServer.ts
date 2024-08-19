@@ -38,7 +38,7 @@ const config: IFDConfig = {
       lieutenant: "temp",
       captain: "temp",
       senior_captain: "temp",
-      safety_officer: "temp",
+      safety_officer: "1275146256423059466",
       battalion_chief: "temp",
       station_officer: "temp",
       district_supervisor: "temp",
@@ -51,7 +51,7 @@ const config: IFDConfig = {
       trainee_rank: "1270701271346712629",
       low_ranks: "temp",
       high_ranks: "temp",
-      low_command: "temp",
+      low_command: "1275148502451753013",
       high_command: "1262127012538093609",
       commissioner_office: "1266302696856621129"
    }

@@ -7,9 +7,11 @@ import getCommandFailedToRunEmbed from "../../utils/getCommandFailedToRunEmbed.t
 import getMessageLoadingEmbed from "../../utils/getMessageLoadingEmbed.ts";
 import { MEmployee } from "../../schemas/employees/employee.ts";
 import { MFDEmployee } from "../../schemas/employees/fdEmployee.ts";
-import { FDRanks, getFDRankFromDBAsEnum } from "../../config/ranks/fdRanks.ts";
+import { FDRank, FDRanks, getFDRankFromDBAsEnum, getFDRankInfoFromDB } from "../../config/ranks/fdRanks.ts";
 import getCommandSuccessEmbed from "../../utils/getCommandSuccessEmbed.ts";
 import getPrettyString from "../../utils/getPrettyString.ts";
+import { getFDRankInfo } from '../../config/ranks/fdRanks';
+import { isSnowflake } from "discord-snowflake";
 
 function getMainEmbedDescription(employee: GuildMember, rankBefore: string, rankAfter: string, reason: string) {
    const res: string = 
@@ -109,28 +111,33 @@ export async function run({interaction, client}: SlashCommandProps) {
 
       const rankAfterPlain = rankAfter.slice(rankAfter.indexOf("_") + 1);
 
-      const rankAfterEnum: FDRanks | undefined = FDRanks[rankAfterPlain as keyof typeof FDRanks];
-      const rankBeforeEnum: FDRanks | undefined = getFDRankFromDBAsEnum(FDEmployeeDocument.rank);
-      if (rankAfterEnum === undefined) {
+      const rankAfterObj: FDRank | undefined = getFDRankInfo(FDRanks[rankAfterPlain as keyof typeof FDRanks], config.guildID);
+      const rankBeforeObj: FDRank | undefined = getFDRankInfoFromDB(FDEmployeeDocument.rank, config.guildID);
+      if (rankAfterObj === undefined) {
          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("Invalid rank.")]});
          return;
       }
-      if (rankBeforeEnum === undefined) {
+      if (rankBeforeObj === undefined) {
          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("There was an error while executing this command.")]});
          return;
       }
 
-      if (rankAfterEnum >= rankBeforeEnum) {
+      if (rankAfterObj.rank >= rankBeforeObj.rank) {
          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("The rank after is higher than the rank before.")]});
+         return;
+      }
+      
+      if ( !isSnowflake(rankAfterObj.rankID) || !isSnowflake(rankBeforeObj.rankID) || !isSnowflake(rankAfterObj.rankCategoryID) || !isSnowflake(rankBeforeObj.rankCategoryID)) {
+         await interaction.editReply({embeds: [getCommandFailedToRunEmbed("There was an error while executing this command.")]});
          return;
       }
 
       await interaction.editReply({embeds: [getMessageLoadingEmbed("Demoting the employee...")]});
 
-      await FDEmployeeDocument.updateOne({$set: {rank: rankAfterEnum}});
+      await FDEmployeeDocument.updateOne({$set: {rank: rankAfterObj.rank}});
 
       mainEmbed.setTitle(`${config.texts.deptName} | Demotion `);
-      mainEmbed.setDescription(getMainEmbedDescription(employee, FDRanks[rankBeforeEnum], FDRanks[rankAfterEnum], reason));
+      mainEmbed.setDescription(getMainEmbedDescription(employee, FDRanks[rankBeforeObj.rank], FDRanks[rankAfterObj.rank], reason));
       mainEmbed.setColor(config.colors.mainEmbedColor);
 
       dmEmbed.setDescription(getDMEmbedDescription(demotionsChannel.id, config.texts.deptName));
@@ -138,7 +145,15 @@ export async function run({interaction, client}: SlashCommandProps) {
 
       await demotionsChannel.send({content: `<@!${employee.user.id}>`, embeds: [mainEmbed]});
       await employee.user.send({embeds: [dmEmbed]}).catch(() => {});
-      await FDEmployeeDocument.updateOne({$set: {rank: rankAfterEnum}});
+
+      await employee.roles.remove(rankBeforeObj.rankID);
+      await employee.roles.add(rankAfterObj.rankID);
+      if (rankAfterObj.rankCategoryID !== rankBeforeObj.rankCategoryID) {
+         await employee.roles.remove(rankBeforeObj.rankCategoryID);
+         await employee.roles.add(rankAfterObj.rankCategoryID);
+      }
+
+      await FDEmployeeDocument.updateOne({$set: {rank: rankAfterObj.rank}});
 
       await interaction.editReply({embeds: [getCommandSuccessEmbed()]});
 

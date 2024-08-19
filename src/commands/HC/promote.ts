@@ -7,9 +7,12 @@ import { MEmployee } from "../../schemas/employees/employee";
 import getCommandFailedToRunEmbed from "../../utils/getCommandFailedToRunEmbed";
 import { getConfig, instanceOfFDConfig } from "../../config";
 import { MFDEmployee } from "../../schemas/employees/fdEmployee";
-import { FDRanks, getFDRankFromDBAsEnum } from '../../config/ranks/fdRanks';
+import { FDRank, FDRanks, getFDRankFromDBAsEnum, getFDRankInfo, getFDRankInfoFromDB } from '../../config/ranks/fdRanks';
 import getCommandSuccessEmbed from "../../utils/getCommandSuccessEmbed";
 import getPrettyString from "../../utils/getPrettyString";
+import rank from "../../autocomplete-src/employee-create/rank";
+
+import { isSnowflake } from "discord-snowflake";
 
 function getMainEmbedDescription(employee: GuildMember, rankBefore: string, rankAfter: string, reason: string) {
    const res: string = 
@@ -109,33 +112,36 @@ export async function run({interaction, client}: SlashCommandProps) {
 
       const rankAfterPlain = rankAfter.slice(rankAfter.indexOf("_") + 1);
 
-      const rankAfterEnum: FDRanks | undefined = FDRanks[rankAfterPlain as keyof typeof FDRanks];
-      const rankBeforeEnum: FDRanks | undefined = getFDRankFromDBAsEnum(FDEmployeeDocument.rank);
-      if (rankAfterEnum === undefined) {
+      const rankAfterObj: FDRank | undefined = getFDRankInfo(FDRanks[rankAfterPlain as keyof typeof FDRanks], config.guildID);
+      const rankBeforeObj: FDRank | undefined = getFDRankInfoFromDB(FDEmployeeDocument.rank, config.guildID);
+      if (rankAfterObj === undefined) {
          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("Invalid rank.")]});
          return;
       }
-      if (rankBeforeEnum === undefined) {
+      if (rankBeforeObj === undefined) {
          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("There was an error while executing this command.")]});
          return;
       }
       
-      if (rankAfterEnum <= rankBeforeEnum) {
+      if (rankAfterObj.rank <= rankBeforeObj.rank) {
          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("The rank after is lower than the rank before.")]});
          return;
       }
 
-      if (rankAfterEnum >= highCommandFDDocument.rank) {
+      if (rankAfterObj.rank >= highCommandFDDocument.rank) {
          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("You cannot promote someone to a higher rank than you.")]});
+         return;
+      }
+
+      if ( !isSnowflake(rankAfterObj.rankID) || !isSnowflake(rankBeforeObj.rankID) || !isSnowflake(rankAfterObj.rankCategoryID) || !isSnowflake(rankBeforeObj.rankCategoryID)) {
+         await interaction.editReply({embeds: [getCommandFailedToRunEmbed("There was an error while executing this command.")]});
          return;
       }
 
       await interaction.editReply({embeds: [getMessageLoadingEmbed("Promoting the employee...")]});
 
-      await FDEmployeeDocument.updateOne({$set: {rank: rankAfterEnum}});
-
       mainEmbed.setTitle(`${config.texts.deptName} | Promotion `);
-      mainEmbed.setDescription(getMainEmbedDescription(employee, FDRanks[rankBeforeEnum], FDRanks[rankAfterEnum], reason));
+      mainEmbed.setDescription(getMainEmbedDescription(employee, FDRanks[rankBeforeObj.rank], FDRanks[rankAfterObj.rank], reason));
       mainEmbed.setColor(config.colors.mainEmbedColor);
 
       dmEmbed.setDescription(getDMEmbedDescription(promotionsChannel.id, config.texts.deptName));
@@ -143,7 +149,15 @@ export async function run({interaction, client}: SlashCommandProps) {
 
       await promotionsChannel.send({content: `<@!${employee.user.id}>`, embeds: [mainEmbed]});
       await employee.user.send({embeds: [dmEmbed]}).catch(() => {});
-      await FDEmployeeDocument.updateOne({$set: {rank: rankAfterEnum}});
+      
+      await employee.roles.remove(rankBeforeObj.rankID);
+      await employee.roles.add(rankAfterObj.rankID);
+      if (rankAfterObj.rankCategoryID !== rankBeforeObj.rankCategoryID) {
+         await employee.roles.remove(rankBeforeObj.rankCategoryID);
+         await employee.roles.add(rankAfterObj.rankCategoryID);
+      }
+
+      await FDEmployeeDocument.updateOne({$set: {rank: rankAfterObj.rank}});
 
       await interaction.editReply({embeds: [getCommandSuccessEmbed()]});
 
