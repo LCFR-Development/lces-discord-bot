@@ -192,6 +192,7 @@ export interface IBotConfig {
     */
    emojis: {
       loading: string;
+      empty: string;
    }
 }
 

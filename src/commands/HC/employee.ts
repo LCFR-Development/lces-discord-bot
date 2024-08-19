@@ -37,6 +37,21 @@ export const data = new SlashCommandBuilder()
          .setAutocomplete(true)
       )
    )
+   .addSubcommand(s => s
+      .setName("find")
+      .setDescription("Find an employee")
+      .addUserOption(o => o
+         .setName("employee")
+         .setDescription("The employee to find")
+         .setRequired(true)
+      )
+      .addStringOption(o => o
+         .setName("division")
+         .setDescription("The division of the employee")
+         .setRequired(true)
+         .setAutocomplete(true)
+      )
+   )
 
 export async function run({interaction, client, handler}: SlashCommandProps) {
    const subcommandGroup = interaction.options.getSubcommandGroup();
@@ -45,6 +60,7 @@ export async function run({interaction, client, handler}: SlashCommandProps) {
    if (subcommandGroup === null) {
       switch (subcommand) {
          case "create": subcommands.create({interaction, client, handler}); break; 
+         case "find": subcommands.find({interaction, client, handler}); break; 
       }
    }
 }

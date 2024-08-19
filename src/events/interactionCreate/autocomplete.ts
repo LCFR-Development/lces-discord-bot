@@ -1,8 +1,9 @@
 import { Interaction } from "discord.js";
-import divisions from "../../autocomplete-src/apps-send-results/divisions";
+import appResultsDivisions from "../../autocomplete-src/apps-send-results/divisions";
 import rank from "../../autocomplete-src/employee-create/rank";
 import promoteRankAfter from "../../autocomplete-src/promote/rank-after";
 import demoteRankAfter from "../../autocomplete-src/demote/rank-after";
+import employeeFindDivision from "../../autocomplete-src/employee-find/division";
 
 export default function(interaction: Interaction) {
    if (!interaction.isAutocomplete()) return;
@@ -10,7 +11,7 @@ export default function(interaction: Interaction) {
    if (interaction.commandName === "apps") {
       if (interaction.options.getSubcommand() === "post-results") {
          if (interaction.options.getFocused(true).name === "division") {
-            divisions(interaction);
+            appResultsDivisions(interaction);
          }
       }
    }
@@ -20,6 +21,10 @@ export default function(interaction: Interaction) {
          if (interaction.options.getSubcommand() === "create") {
             if (interaction.options.getFocused(true).name === "rank") {
                rank(interaction);
+            }
+         } else if (interaction.options.getSubcommand() === "find") {
+            if (interaction.options.getFocused(true).name === "division") {
+               employeeFindDivision(interaction);
             }
          }
       }
