@@ -76,6 +76,25 @@ export interface IEMSConfig extends IConfig {
     * Used for type checks
     */
    readonly type: "ems";
+   /**
+    * Discord IDs of rank's roles
+    */
+   ranks: {
+      junior_paramedc: Snowflake,
+      paramedic: Snowflake,
+      senior_paramedc: Snowflake,
+      advanced_paramedc: Snowflake,
+      chief_executive_officer: Snowflake,
+      chief_operative_officer: Snowflake,
+      chief_operative_officer_assistant: Snowflake,
+   },
+   /**
+    * Discord IDs of category roles
+    */
+   rankCategories: {
+      paramedicine: Snowflake,
+      directorates: Snowflake,
+   }
 }
 
 export interface IFDConfig extends IConfig {
@@ -285,11 +304,31 @@ export class FDGlobalConfig implements IFDGlobalConfig {
 }
 
 export interface IEMSGlobalConfig extends IGlobalConfig {
-
+   /**
+    * Arrays of role IDs from all servers
+    */
+   ranks: {
+      junior_paramedc: Array<Snowflake>,
+      paramedic: Array<Snowflake>,
+      senior_paramedc: Array<Snowflake>,
+      advanced_paramedc: Array<Snowflake>,
+      chief_executive_officer: Array<Snowflake>,
+      chief_operative_officer: Array<Snowflake>,
+      chief_operative_officer_assistant: Array<Snowflake>,
+   },
+   /**
+    * Arrays of role IDs from all servers 
+    */
+   rankCategories: {
+      paramedicine: Array<Snowflake>,
+      directorates: Array<Snowflake>,
+   }
 }
 
 export class EMSGlobalConfig implements IEMSGlobalConfig {
    roles: IEMSGlobalConfig["roles"];
+   ranks: IEMSGlobalConfig["ranks"];
+   rankCategories: IEMSGlobalConfig["rankCategories"];
 
    constructor() {
       this.roles = {
@@ -297,6 +336,19 @@ export class EMSGlobalConfig implements IEMSGlobalConfig {
          loaRole: [],
          reactedToActivityTest: [],
          appReader: [],
+      },
+      this.ranks = {
+         paramedic: [],
+         senior_paramedc: [],
+         advanced_paramedc: [],
+         junior_paramedc: [],
+         chief_executive_officer: [],
+         chief_operative_officer: [],
+         chief_operative_officer_assistant: [],
+      },
+      this.rankCategories = {
+         paramedicine: [],
+         directorates: [],
       }
    }
 }
