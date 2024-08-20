@@ -1,12 +1,11 @@
 import { ButtonKit, SlashCommandProps } from "commandkit";
 
-import { getConfig, IConfig } from "../../../config";
-import { ActionRowBuilder, EmbedBuilder } from "@discordjs/builders";
-import { ButtonInteraction, ButtonStyle, Colors, Snowflake } from "discord.js";
+import { getConfig } from "../../../config";
+import { ActionRowBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder, Snowflake } from "discord.js";
 import * as ms from '@lukeed/ms';
 import getCommandSuccessEmbed from "../../../utils/getCommandSuccessEmbed";
 import getCommandFailedToRunEmbed from "../../../utils/getCommandFailedToRunEmbed";
-import { IActivityCheck, MActivityCheck, SActivityCheck } from '../../../schemas/activity-check';
+import { MActivityCheck } from '../../../schemas/activity-check';
 import { v4 as uuid } from 'uuid';
 import createDisabledButtonFromButtonKit from "../../../utils/createDisabledButtonFromButtonKit";
 import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
