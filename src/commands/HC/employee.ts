@@ -14,7 +14,7 @@ export const data = new SlashCommandBuilder()
    .setDescription("Manage employees")
    .addSubcommand(s => s
       .setName("create")
-      .setDescription("Create an employee (wip)")
+      .setDescription("Create an employee")
       .addUserOption(o => o
          .setName("discord")
          .setDescription("The discord user to create an employee for")

@@ -10,4 +10,8 @@ export default interface CustomCommandOptions extends CommandOptions {
     * Makes the command not use category perms validation
     */
    skipCategoryPerms?: boolean;
+   /**
+    * Makes a subcommand not use category perms validation
+    */
+   skinCategoryPermsSubcommands?: Array<{group?: string, subcommand: string}>;
 }
