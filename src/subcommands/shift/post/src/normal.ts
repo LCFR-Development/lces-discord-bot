@@ -16,12 +16,15 @@ export default async function({interaction}: SlashCommandProps) {
    
    await interaction.editReply({embeds: [getMessageLoadingEmbed("Creating shift...")]})
 
+   const notes: string = interaction.options.getString("notes") ?? "N/A";
+
    const shiftID = uuid();
 
    const shiftEmbed = new EmbedBuilder()
       .setTitle(`${config.texts.deptName} | Shift`)
       .setDescription(
-         `${interaction.user} has decided to host a shift! Come and join the game, promotions *might* be handed out!\n\n`+
+         `${interaction.user} has decided to host a shift! Come and join the game, promotions *might* be handed out!\n`+
+         `Shift notes: ${notes}\n\n` +
          `React with ✅ if you are joining`
       )
       .setImage(config.images.shiftImage)
@@ -34,6 +37,7 @@ export default async function({interaction}: SlashCommandProps) {
       host: interaction.user.id,
       guild: interaction.guild.id,
       isDaily: false,
+      notes: notes,
       time: new Date(Date.now())
    })
 

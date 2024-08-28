@@ -16,6 +16,8 @@ export default async function({interaction}: SlashCommandProps) {
 
    await interaction.editReply({embeds: [getMessageLoadingEmbed("Creating shift...")]});
 
+   const notes: string = interaction.options.getString("notes") ?? "N/A";
+
    const shiftsChannel = await interaction.guild.channels.fetch(config.channels.shift);
    if (!shiftsChannel?.isTextBased()) return;
 
@@ -26,13 +28,15 @@ export default async function({interaction}: SlashCommandProps) {
       host: interaction.user.id,
       guild: interaction.guild.id,
       isDaily: true,
+      notes: notes,
       time: new Date(Date.now())
    })
 
    const shiftEmbed = new EmbedBuilder()
       .setTitle(`${config.texts.deptName} | Shift`)
       .setDescription(
-         `Because of an SSU, a daily shift has been hosted! Come and join the game.\n\n`+
+         `Because of an SSU, a daily shift has been hosted! Come and join the game.\n`+
+         `Shift notes: ${notes}\n\n` +
          `React with ✅ if you are joining`
       )
       .setImage(config.images.shiftImage)

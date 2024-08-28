@@ -13,10 +13,20 @@ export const data = new SlashCommandBuilder()
       .addSubcommand(s => s
          .setName("normal")
          .setDescription("Post a shift to the shifts channel.")
+         .addStringOption(s => s
+            .setName("notes")
+            .setDescription("Notes about the shift")
+            .setRequired(false)
+         )
       )
       .addSubcommand(s => s
          .setName("daily")
          .setDescription("Post a daily shift to the shifts channel.")
+         .addStringOption(s => s
+            .setName("notes")
+            .setDescription("Notes about the shift")
+            .setRequired(false)
+         )
       )
    )
    .addSubcommand(s => s
