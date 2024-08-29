@@ -52,6 +52,20 @@ export const data = new SlashCommandBuilder()
          .setAutocomplete(true)
       )
    )
+   .addSubcommand(s => s
+      .setName("remove")
+      .setDescription("Remove an employee")
+      .addStringOption(o => o
+         .setName("id")
+         .setDescription("The ID of the employee to remove")
+         .setRequired(false)
+      )
+      .addUserOption(o => o
+         .setName("employee")
+         .setDescription("The employee to remove")
+         .setRequired(false)
+      )
+   )
 
 export async function run({interaction, client, handler}: SlashCommandProps) {
    const subcommandGroup = interaction.options.getSubcommandGroup();
@@ -61,6 +75,7 @@ export async function run({interaction, client, handler}: SlashCommandProps) {
       switch (subcommand) {
          case "create": subcommands.create({interaction, client, handler}); break; 
          case "find": subcommands.find({interaction, client, handler}); break; 
+         case "remove": subcommands.remove({interaction, client, handler}); break;
       }
    }
 }
