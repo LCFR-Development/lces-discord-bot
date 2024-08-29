@@ -38,6 +38,7 @@ export default async function({interaction}: SlashCommandProps) {
             {name: "ID", value: document.ID},
             {name: "Started by", value: `<@!${document.host}>\n${(await interaction.guild?.members.fetch(document.host))?.user?.username}`},
             {name: "Date", value: `<t:${shiftDateTimestamp}:f>`},
+            {name: "Notes", value: document.notes},
          )
          .setColor("#0099ff");
    } else {
@@ -47,6 +48,7 @@ export default async function({interaction}: SlashCommandProps) {
             {name: "ID", value: document.ID},
             {name: "Host", value: `<@!${document.host}>\n${(await interaction.guild?.members.fetch(document.host))?.user?.username}`},
             {name: "Date", value: `<t:${shiftDateTimestamp}:f>`},
+            {name: "Notes", value: document.notes},
          )
          .setColor("#0099ff");
    }
