@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, Snowflake } from "discord.js";
+import { SlashCommandBuilder,  } from "discord.js";
 
 import { SlashCommandProps } from "commandkit";
 import CustomCommandOptions from "../../types/CustomCommandOptions";
@@ -8,13 +8,25 @@ export const data = new SlashCommandBuilder()
    .setDescription("Infract an employee")
    .addUserOption(o => o
       .setName("employee")
-      .setDescription("the employee to infract")
+      .setDescription("The employee to infract.")
       .setRequired(true)
    )
+  .addStringOption(o => o
+    .setName("infraction")
+    .setDescription("The infraction.")
+    .setRequired(true)
+    .setAutocomplete(true)
+  )
+  .addStringOption(o => o
+    .setName("reason")
+    .setDescription("The reason for the infraction.")
+    .setRequired(true)
+  )
 
 export async function run({interaction, client}: SlashCommandProps) {
-   
+
 }
 
 export const options: CustomCommandOptions = {
+
 }
