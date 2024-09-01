@@ -26,9 +26,6 @@ const config: IEMSConfig = {
    colors: {
       mainEmbedColor: "Blurple",
    },
-   emojis: {
-
-   },
    ranks: {
       junior_paramedc: "1249824320214143096",
       paramedic: "1249824261997199507",

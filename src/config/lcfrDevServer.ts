@@ -20,9 +20,6 @@ const config: IFDConfig = {
       employeeRole: "1262425657518854236",
       appReader: "1270714251715280896"
    },
-   emojis: {
-
-   },
    colors: {
       mainEmbedColor: "DarkRed",
    },

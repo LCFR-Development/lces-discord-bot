@@ -56,12 +56,6 @@ export interface IConfig {
    colors: {
       mainEmbedColor: ColorResolvable;
    }
-   /**
-    * Markdown of emojis
-    */
-   emojis: {
-      
-   };
 } 
 
 export interface IFAVFDConfig extends IConfig {
@@ -146,7 +140,6 @@ export class FDConfig implements IFDConfig {
    colors: IFDConfig["colors"];
    channels: IFDConfig["channels"];
    roles: IFDConfig["roles"];
-   emojis: IFDConfig["emojis"];
    constructor() {
       this.guildID = "";
       this.type = "fd";
@@ -169,9 +162,6 @@ export class FDConfig implements IFDConfig {
          loaRole: "",
          employeeRole: "",
          appReader: "",
-      };
-      this.emojis = {
-
       };
       this.colors = {
          mainEmbedColor: "Default",
@@ -336,7 +326,7 @@ export class EMSGlobalConfig implements IEMSGlobalConfig {
          loaRole: [],
          reactedToActivityTest: [],
          appReader: [],
-      },
+      };
       this.ranks = {
          paramedic: [],
          senior_paramedc: [],
@@ -345,7 +335,7 @@ export class EMSGlobalConfig implements IEMSGlobalConfig {
          chief_executive_officer: [],
          chief_operative_officer: [],
          chief_operative_officer_assistant: [],
-      },
+      };
       this.rankCategories = {
          paramedicine: [],
          directorates: [],
@@ -393,7 +383,7 @@ export function instanceOfFAVFDConfig(config: IFDConfig | IEMSConfig | IFAVFDCon
  * @returns Config from all servers.
  */
 export function getFDGlobalConfig(): IFDGlobalConfig {
-   let globalConfig: IFDGlobalConfig = new FDGlobalConfig();
+   const globalConfig: IFDGlobalConfig = new FDGlobalConfig();
 
    for (const [,config] of configsCollection) {
       if (!instanceOfFDConfig(config)) continue;
@@ -412,7 +402,7 @@ export function getFDGlobalConfig(): IFDGlobalConfig {
 }
 
 export function getEMSGlobalConfig(): IEMSGlobalConfig {
-   let globalConfig: IEMSGlobalConfig = new EMSGlobalConfig();
+   const globalConfig: IEMSGlobalConfig = new EMSGlobalConfig();
 
    for (const [,config] of configsCollection) {
       if (!instanceOfEMSConfig(config)) continue;
