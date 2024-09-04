@@ -1,10 +1,10 @@
 import { SlashCommandProps } from "commandkit";
 import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
 import { getConfig, instanceOfFDConfig } from "../../../config";
-import { ClientVoiceManager, Embed, EmbedBuilder, GuildMember } from "discord.js";
+import {   EmbedBuilder, GuildMember } from "discord.js";
 import { MFDEmployee } from "../../../schemas/employees/fdEmployee";
 import getCommandFailedToRunEmbed from "../../../utils/getCommandFailedToRunEmbed";
-import { IEmployee, MEmployee } from "../../../schemas/employees/employee";
+import {  MEmployee } from "../../../schemas/employees/employee";
 import axios from "axios";
 import { RobloxUserFromID } from "../../../types/RobloxUserFromID";
 import getPrettyString from "../../../utils/getPrettyString";
@@ -29,8 +29,18 @@ export default async function({interaction}: SlashCommandProps) {
    try {
       const mainEmployee = await MEmployee.findOne({discordID: employee.user.id});
       if (!mainEmployee) {
-         throw new Error("Main employee not found");
+        await interaction.editReply({embeds: [getCommandFailedToRunEmbed("Employee not found.")]})
+        return;
       }
+
+      const discordMember = await interaction.guild.members.fetch(mainEmployee.discordID);
+      const robloxMemberApiResponce = await axios.get<RobloxUserFromID>(`https://users.roblox.com/v1/users/${mainEmployee.robloxID}`);
+
+      const robloxMember: RobloxUserFromID = robloxMemberApiResponce.data;
+
+      mainEmbed.setTitle(`${robloxMember.name}`);
+      mainEmbed.setColor(config.colors.mainEmbedColor);
+
       if (instanceOfFDConfig(config)) {
          if (division === "fd") {
             const FDEmployee = await MFDEmployee.findOne({ID: mainEmployee.ID});
@@ -38,13 +48,6 @@ export default async function({interaction}: SlashCommandProps) {
                await interaction.editReply({embeds: [getCommandFailedToRunEmbed(`Could not find an employee.`)]});
                return;
             }
-            const discordMember = await interaction.guild.members.fetch(mainEmployee.discordID);
-            const robloxMemberApiResponce = await axios.get<RobloxUserFromID>(`https://users.roblox.com/v1/users/${mainEmployee.robloxID}`);
-
-            const robloxMember: RobloxUserFromID = robloxMemberApiResponce.data;
-
-            mainEmbed.setTitle(`${robloxMember.name}`);
-   
             mainEmbed.setDescription(
                `**Callsign:** ${FDEmployee.callsign}\n`+
                `**Discord user:** <@${mainEmployee.discordID}> (${discordMember.user.username})\n`+
@@ -54,8 +57,6 @@ export default async function({interaction}: SlashCommandProps) {
                `**Sub-divisions:**\n` + 
                `${botConfig.emojis.empty} FM: ${mainEmployee.departments.FM}`
             );
-
-            mainEmbed.setColor(config.colors.mainEmbedColor);
          }
       }
    } catch (error) {
