@@ -1,6 +1,6 @@
 import { Snowflake } from "discord.js";
-import { getConfig, getConfigByID, IConfig, instanceOfFDConfig } from '../index';
-
+import {  getConfigByID, instanceOfFDConfig } from '../index';
+//TODO Update ranks
 export enum FDRanks {
    probationary_firefighter,
    firefighter,
@@ -9,12 +9,10 @@ export enum FDRanks {
    engineer,
    lieutenant,
    captain,
-   senior_captain,
-   safety_officer,
    battalion_chief,
-   station_officer,
-   district_supervisor,
    district_chief,
+   assistant_fire_chief,
+   fire_chief,
    assistant_commissioner,
    deputy_commissioner,
    commissioner
@@ -84,16 +82,16 @@ export function getFDRankInfo(rank: FDRanks, guildID: Snowflake): FDRank | undef
    } else if (rank === FDRanks.probationary_firefighter) {
       rankCategory = FDRankCategories.trainee_rank;
 
-   } else if (rank >= FDRanks.firefighter && rank <= FDRanks.advanced_firefighter) {
+   } else if (rank >= FDRanks.firefighter && rank <= FDRanks.senior_firefighter) {
       rankCategory = FDRankCategories.low_ranks;
 
-   } else if (rank >= FDRanks.engineer && rank <= FDRanks.lieutenant) {
+   } else if (rank >= FDRanks.advanced_firefighter && rank <= FDRanks.engineer) {
       rankCategory = FDRankCategories.high_ranks;
 
-   } else if (rank >= FDRanks.captain && rank <= FDRanks.safety_officer) {
+   } else if (rank >= FDRanks.lieutenant && rank <= FDRanks.captain) {
       rankCategory = FDRankCategories.low_command;
 
-   } else if (rank >= FDRanks.battalion_chief && rank <= FDRanks.district_chief) {
+   } else if (rank >= FDRanks.battalion_chief && rank <= FDRanks.fire_chief) {
       rankCategory = FDRankCategories.high_command;
       
    } else if (rank >= FDRanks.assistant_commissioner && rank <= FDRanks.commissioner) {

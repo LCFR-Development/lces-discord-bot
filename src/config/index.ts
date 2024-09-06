@@ -91,6 +91,21 @@ export interface IEMSConfig extends IConfig {
    }
 }
 
+interface FMRanks {
+   probationary_fire_marshal: Snowflake,
+   junior_fire_marshal: Snowflake,
+   fire_marshal: Snowflake,
+   senior_fire_marshal: Snowflake,
+   supervisor_fire_marshal: Snowflake,
+   assistant_head_fire_marshal: Snowflake,
+   deputy_head_fire_marshal: Snowflake,
+   head_fire_marshal: Snowflake
+}
+
+interface FMRankCategories {
+
+}
+
 export interface IFDConfig extends IConfig {
    /**
     * Used for type checks
@@ -107,12 +122,10 @@ export interface IFDConfig extends IConfig {
       engineer: Snowflake,
       lieutenant: Snowflake,
       captain: Snowflake,
-      senior_captain: Snowflake,
-      safety_officer: Snowflake,
       battalion_chief: Snowflake,
-      station_officer: Snowflake,
-      district_supervisor: Snowflake,
       district_chief: Snowflake,
+      assistant_fire_chief: Snowflake,
+      fire_chief: Snowflake,
       assistant_commissioner: Snowflake,
       deputy_commissioner: Snowflake,
       commissioner: Snowflake
@@ -128,6 +141,16 @@ export interface IFDConfig extends IConfig {
       high_command: Snowflake,
       commissioner_office: Snowflake
    };
+
+  // /**
+  //  * Discord IDs of FM roles
+  //  */
+  // fmRanks: FMRanks;
+  //
+  // /**
+  //  * Discord IDs of FM category roles
+  //  */
+  // fmRankCategories: FMRankCategories;
 }
 
 export class FDConfig implements IFDConfig {
@@ -174,12 +197,10 @@ export class FDConfig implements IFDConfig {
          engineer: "",
          lieutenant: "",
          captain: "",
-         senior_captain: "",
-         safety_officer: "",
          battalion_chief: "",
-         station_officer: "",
-         district_supervisor: "",
          district_chief: "",
+         assistant_fire_chief: "",
+         fire_chief: "",
          assistant_commissioner: "",
          deputy_commissioner: "",
          commissioner: "",
@@ -229,12 +250,10 @@ export interface IFDGlobalConfig extends IGlobalConfig {
       engineer: Array<Snowflake>,
       lieutenant: Array<Snowflake>,
       captain: Array<Snowflake>,
-      senior_captain: Array<Snowflake>,
-      safety_officer: Array<Snowflake>,
       battalion_chief: Array<Snowflake>,
-      station_officer: Array<Snowflake>,
-      district_supervisor: Array<Snowflake>,
       district_chief: Array<Snowflake>,
+      assistant_fire_chief: Array<Snowflake>,
+      fire_chief: Array<Snowflake>,
       assistant_commissioner: Array<Snowflake>,
       deputy_commissioner: Array<Snowflake>,
       commissioner: Array<Snowflake>
@@ -272,12 +291,10 @@ export class FDGlobalConfig implements IFDGlobalConfig {
          engineer: [],
          lieutenant: [],
          captain: [],
-         senior_captain: [],
-         safety_officer: [],
          battalion_chief: [],
-         station_officer: [],
-         district_supervisor: [],
          district_chief: [],
+         assistant_fire_chief: [],
+         fire_chief: [],
          assistant_commissioner: [],
          deputy_commissioner: [],
          commissioner: [],
