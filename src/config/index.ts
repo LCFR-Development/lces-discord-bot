@@ -3,6 +3,8 @@ import { Collection, ColorResolvable, Interaction, Snowflake } from "discord.js"
 // import lcfr from "./lcfr";
 import lcfrDevServer from "./lcfrDevServer";
 
+export type ConfigTypes = "fd" | "ems" | "favfd";
+
 export interface IConfig {
    /**
     * Discord ID of the server/guild
@@ -11,7 +13,7 @@ export interface IConfig {
    /**
     * Used for type checks
     */
-   readonly type: "fd" | "ems" | "favfd";
+   readonly type: ConfigTypes;
    /**
     * Texts in command responces
     */
@@ -78,9 +80,9 @@ export interface IEMSConfig extends IConfig {
       paramedic: Snowflake,
       senior_paramedc: Snowflake,
       advanced_paramedc: Snowflake,
-      chief_executive_officer: Snowflake,
-      chief_operative_officer: Snowflake,
-      chief_operative_officer_assistant: Snowflake,
+      assistant_director: Snowflake,
+      deputy_director: Snowflake,
+      director: Snowflake,
    },
    /**
     * Discord IDs of category roles
@@ -103,7 +105,8 @@ interface FMRanks {
 }
 
 interface FMRankCategories {
-
+  fire_marshal_service: Snowflake;
+  fm_ho: Snowflake;
 }
 
 export interface IFDConfig extends IConfig {
