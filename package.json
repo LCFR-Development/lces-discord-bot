@@ -17,6 +17,7 @@
     "commandkit": "^0.1.10",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
+    "erlc-api": "^1.3.12",
     "mongoose": "^8.5.1",
     "node.js": "^0.0.1-security",
     "uuid": "^10.0.0"
