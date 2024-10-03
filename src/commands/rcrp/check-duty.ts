@@ -16,7 +16,7 @@ function useAPI(robloxID: string){
 }
 
 export const data = new SlashCommandBuilder()
-    .setName("checkDuty")
+    .setName("check-duty")
     .setDescription("Check if an employee is playing as FD")
     .addUserOption(o => o
         .setName("employee")
