@@ -1,5 +1,5 @@
 import { SlashCommandProps } from "commandkit";
-import { SlashCommandBuilder,GuildMember, EmbedBuilder, Colors, Emoji } from "discord.js";
+import { SlashCommandBuilder,GuildMember, EmbedBuilder, Colors} from "discord.js";
 import { MEmployee } from "../../schemas/employees/employee";
 import { getConfig} from "../../config";
 import getCommandFailedToRunEmbed from "../../utils/getCommandFailedToRunEmbed";
@@ -16,11 +16,11 @@ interface infoType {
     playerInfo: FixedServerPlayer;
     vehicles: fixedVehiclesLogs;
 }
-interface FixedServerPlayer extends erlc.ServerPlayer{
+interface FixedServerPlayer extends Partial<erlc.ServerPlayer>{
     Callsign: string | undefined;
     Team: string;
 }
-interface fixedVehiclesLogs extends erlc.VehiclesLog{
+interface fixedVehiclesLogs extends Partial<erlc.VehiclesLog>{
     Name: string | undefined;
 }
 
@@ -30,10 +30,13 @@ interface fixedVehiclesLogs extends erlc.VehiclesLog{
         const vehicles = await erlc.getVehicles(apiKey);
         const foundPlayer = players.find(players => players.Player.startsWith(robloxName));
         const foundVehicles = vehicles.find(vehicles => vehicles.Owner === robloxName)
-        if(!foundPlayer){return false}
+        if (foundPlayer) {
+            foundPlayer.Callsign = foundPlayer.Callsign || 'N/A'; // Default to 'N/A' if Callsign is undefined
+            foundPlayer.Team = foundPlayer.Team || 'Unknown';     // Default to 'Unknown' if Team is undefined
+        } else {return false}
         const info: infoType = {
             playerInfo: foundPlayer,
-            vehicles: foundVehicles
+            vehicles: foundVehicles || { Name: 'none' }
         }
         return info
     };
@@ -57,7 +60,7 @@ export async function run({interaction, client}: SlashCommandProps) {
     try {
         const mainEmployee = await MEmployee.findOne({discordID: employee.user.id});
         if (!mainEmployee) {
-            await interaction.editReply({embeds: [getCommandFailedToRunEmbed("Employee not found.")]})
+            await interaction.editReply({embeds: [getCommandFailedToRunEmbed("Employee not found in the database.")]})
             return;
         }
         const robloxID = mainEmployee.robloxID
@@ -69,14 +72,22 @@ export async function run({interaction, client}: SlashCommandProps) {
         mainEmbed.setTitle(`${robloxMember.name} in-game information`);
 
         if(info == false){
-            await interaction.editReply({embeds: [getCommandFailedToRunEmbed(`Could not find the employee in-game.`)]});
+            mainEmbed.setColor(Colors.Red);
+            mainEmbed.setDescription(
+                '❌ Employee is not in-game'
+            )
         }else{
+            let vehicle = info.vehicles ? info.vehicles.Name : 'none';
+            if (!vehicle) { 
+                vehicle = 'none'; 
+            }
             mainEmbed.setColor(config.colors.mainEmbedColor);
             mainEmbed.setDescription(
                 `**Team:** ${info.playerInfo.Team}\n`+
                 `**Callsign:** ${info.playerInfo.Callsign}\n`+
                 `**Vehicles:** ${info.vehicles.Name}\n`
             )
+            
         }
     } catch (error) {
         await interaction.editReply({embeds: [getCommandFailedToRunEmbed(`There was an error while executing this command.`)]});
