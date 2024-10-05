@@ -1,7 +1,10 @@
 import { EmbedBuilder } from "discord.js";
 
-
-export default function() {
+/**
+ * 
+ * @returns Embed ready to be sent
+ */
+export default function(): EmbedBuilder {
    return new EmbedBuilder()
       .setDescription(
          "✅ Command successfuly ran!"

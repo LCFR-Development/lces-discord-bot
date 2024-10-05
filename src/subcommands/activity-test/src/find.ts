@@ -11,7 +11,8 @@ import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
-   const config = getConfig(interaction) as IConfig;
+   const config = getConfig(interaction);
+   if (!config) return;
    if (!interaction.inCachedGuild()) return;
 
    const id = interaction.options.getString("id");
@@ -19,6 +20,11 @@ export default async function({interaction}: SlashCommandProps) {
    const document = await MActivityCheck.findOne({ID: id});
    if (!document) {
       await interaction.followUp({embeds: [getCommandFailedToRunEmbed("Activity Check not found.")]});
+      return;
+   }
+
+   if (document.guildID !== interaction.guild.id) {
+      await interaction.editReply({embeds: [getCommandFailedToRunEmbed("This activity check is from another server.")]});
       return;
    }
    
@@ -52,12 +58,18 @@ export default async function({interaction}: SlashCommandProps) {
    inactiveButton.onClick(
       async (subInteraction: ButtonInteraction) => {
          await subInteraction.deferReply({ephemeral: true});
-         await subInteraction.editReply({embeds: [getMessageLoadingEmbed("Getting members...", config)]});
+         await subInteraction.editReply({embeds: [getMessageLoadingEmbed("Getting members...")]});
 
          const membersOnLoa: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.loaRole))?.members ?? new Collection();
-         const reactedMembers: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.reactedToActivityTest))?.members ?? new Collection();
+         const reactedMembers: Collection<Snowflake, GuildMember> = new Collection();
          const employees: Collection<Snowflake, GuildMember> = (await interaction.guild?.roles.fetch(config?.roles.employeeRole))?.members ?? new Collection();
 
+         // Get all employees that reacted from Employee role and the array in db
+         for (const [id, member] of employees) {
+            if (document.employeesReacted.includes(id)) {
+               reactedMembers.set(id, member);
+            }            
+         }
 
          const inactiveMembers: Collection<Snowflake, GuildMember> = new Collection();
 
@@ -82,7 +94,7 @@ export default async function({interaction}: SlashCommandProps) {
             .setDescription(inactiveMembersString)
             .setColor("Blue");
 
-         await subInteraction.followUp({embeds: [inactiveMembersEmbed]});
+         await subInteraction.editReply({embeds: [inactiveMembersEmbed]});
       },
       {
          message: mainMessage,
@@ -99,6 +111,7 @@ export default async function({interaction}: SlashCommandProps) {
                {name: "ID", value: document.ID},
                {name: "buttonID", value: document.buttonID},
                {name: "createdBy", value: document.createdBy},
+               {name: "guildID", value: document.guildID},
                {name: "Deadline", value: document.deadline + "\n" + `(${new Date(document.deadline).getTime()})`}
             )
             .setColor("Blurple")

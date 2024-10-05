@@ -1,23 +1,23 @@
 import { ButtonKit, SlashCommandProps } from "commandkit";
 
-import { getConfig, IConfig } from "../../../config";
-import { ActionRowBuilder, EmbedBuilder } from "@discordjs/builders";
-import { ButtonInteraction, ButtonStyle, Colors, Snowflake } from "discord.js";
+import { getConfig } from "../../../config";
+import { ActionRowBuilder, ButtonInteraction, ButtonStyle, EmbedBuilder, Snowflake } from "discord.js";
 import * as ms from '@lukeed/ms';
 import getCommandSuccessEmbed from "../../../utils/getCommandSuccessEmbed";
 import getCommandFailedToRunEmbed from "../../../utils/getCommandFailedToRunEmbed";
-import { IActivityCheck, MActivityCheck, SActivityCheck } from '../../../schemas/activity-check';
+import { MActivityCheck } from '../../../schemas/activity-check';
 import { v4 as uuid } from 'uuid';
 import createDisabledButtonFromButtonKit from "../../../utils/createDisabledButtonFromButtonKit";
 import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
-   const config = getConfig(interaction) as IConfig;
+   const config = getConfig(interaction);
+   if (!config) return;
 
    if (!interaction.inCachedGuild()) return;
 
-   await interaction.editReply({embeds: [getMessageLoadingEmbed("Preparing activity check...", config)]});
+   await interaction.editReply({embeds: [getMessageLoadingEmbed("Preparing activity check...")]});
 
    for (const [,member] of (await interaction.guild.roles.fetch(config.roles.reactedToActivityTest))!.members) {
       if (member.roles.cache.has(config.roles.reactedToActivityTest)) {
@@ -52,19 +52,20 @@ export default async function({interaction}: SlashCommandProps) {
       ID: activityTestID,
       buttonID: activeButtonCustomID,
       createdBy: interaction.user.id,
+      guildID: interaction.guild.id,
       deadline: deadline,
       employeesReacted: []
    });
 
-   const employeesReactedTempArray: Array<Snowflake> = [];
+
 
    const activityCheckEmbed = new EmbedBuilder()
-      .setTitle("LCFR | Activity check")
+      .setTitle(`${config.texts.deptName} | Activity check`)
       .setDescription(
-         "The LCFR High Command team has decided to host an activity check. Please press the button below to let the HC team know you are active. Not reacting will result in punishment.\n\n" +
+         config.texts.ACMainMsg + "\n\n" +
          `Time limit: <t:${deadlineTimeStamp}:R>`
       )
-      .setFooter({text: `AC ID: ${activityTestID}`})
+      .setFooter({text: `${activityTestID}`})
       .setColor(0x9e0000);
 
    const channel = await interaction.client.channels.fetch(config.channels.activityTest);
@@ -74,6 +75,14 @@ export default async function({interaction}: SlashCommandProps) {
 
    activeButton.onClick(
       async (subInteraction: ButtonInteraction) => {
+
+         const tempDocument = await MActivityCheck.findOne({ID: activityTestID});
+         if (!tempDocument) {
+            await interaction.followUp("Activity test not found.");
+            return;
+         }
+         const employeesReactedTempArray: Array<Snowflake> = tempDocument.employeesReacted;
+
          if (!subInteraction.member) return;
          if (!subInteraction.inCachedGuild()) return;
          if (!subInteraction.member.roles.cache.has(config.roles.reactedToActivityTest)) {
