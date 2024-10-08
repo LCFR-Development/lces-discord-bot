@@ -6,6 +6,7 @@ import getCommandFailedToRunEmbed from "../../utils/getCommandFailedToRunEmbed";
 import erlc from "erlc-api"
 import axios from "axios";
 import { RobloxUserFromID } from "../../types/RobloxUserFromID";
+import { ExtendedServerPlayer } from "../../types/ExtendedServerPlayer";
 
 const client = new erlc.Client({globalToken: "", });
 client.config();
@@ -13,33 +14,26 @@ client.config();
 const mainEmbed = new EmbedBuilder();
 
 interface infoType {
-    playerInfo: FixedServerPlayer;
-    vehicles: fixedVehiclesLogs;
-}
-interface FixedServerPlayer extends Partial<erlc.ServerPlayer>{
-    Callsign: string | undefined;
-    Team: string;
-}
-interface fixedVehiclesLogs extends Partial<erlc.VehiclesLog>{
-    Name: string | undefined;
+    playerInfo: ExtendedServerPlayer;
+    vehicles: erlc.VehiclesLog;
 }
 
-    const useApi = async (robloxName:string): Promise<false | infoType> => {
-        const apiKey = process.env.SERVER_API_KEY as string;
-        const players = await erlc.getPlayers(apiKey);
-        const vehicles = await erlc.getVehicles(apiKey);
-        const foundPlayer = players.find(players => players.Player.startsWith(robloxName));
-        const foundVehicles = vehicles.find(vehicles => vehicles.Owner === robloxName)
-        if (foundPlayer) {
-            foundPlayer.Callsign = foundPlayer.Callsign || 'N/A'; // Default to 'N/A' if Callsign is undefined
-            foundPlayer.Team = foundPlayer.Team || 'Unknown';     // Default to 'Unknown' if Team is undefined
-        } else {return false}
-        const info: infoType = {
-            playerInfo: foundPlayer,
-            vehicles: foundVehicles || { Name: 'none' }
-        }
-        return info
-    };
+const useApi = async (robloxName:string): Promise<false | infoType> => {
+    const apiKey = process.env.SERVER_API_KEY as string;
+    const players = await erlc.getPlayers(apiKey) as Array<ExtendedServerPlayer>;
+    const vehicles = await erlc.getVehicles(apiKey);
+    const foundPlayer = players.find(players => players.Player.startsWith(robloxName));
+    const foundVehicles = vehicles.find(vehicles => vehicles.Owner === robloxName)
+    if (foundPlayer) {
+        foundPlayer.Callsign = foundPlayer.Callsign || 'N/A'; // Default to 'N/A' if Callsign is undefined
+        foundPlayer.Team = foundPlayer.Team || 'Unknown';     // Default to 'Unknown' if Team is undefined
+    } else {return false}
+    const info: infoType = {
+        playerInfo: foundPlayer,
+        vehicles: foundVehicles || { Name: 'N/A', Owner: "N/A:0", Texture: null } as erlc.VehiclesLog
+    }
+    return info
+};
 
 
 export const data = new SlashCommandBuilder()
