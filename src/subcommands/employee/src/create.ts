@@ -60,7 +60,7 @@ export default async function({interaction}: SlashCommandProps) {
          ID: employeeID,
          discordID: discordMember.id,
          robloxID: robloxUser.id,
-         departments: {FD: false, EMS: false, FM: false, FAVFD: false} as IEmployee["departments"],
+         departments: {FD: false} as IEmployee["departments"],
       });
 
       const rankPlain: string = rankInput.slice(rankInput.indexOf("_") + 1);

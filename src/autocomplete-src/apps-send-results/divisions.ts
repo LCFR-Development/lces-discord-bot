@@ -1,5 +1,5 @@
 import { Interaction } from "discord.js";
-import { getConfig, instanceOfEMSConfig, instanceOfFAVFDConfig, instanceOfFDConfig } from "../../config";
+import { getConfig, instanceOfFDConfig } from "../../config";
 
 export default function(interaction: Interaction) {
    const config = getConfig(interaction);
@@ -18,13 +18,13 @@ export default function(interaction: Interaction) {
       choices.push({name: "Special Operations", value: "special_operations"});
    }
 
-   if (instanceOfEMSConfig(config)) {
-      choices.push({name: "Emergency Medical Services", value: "emergency_medical_services"});
-   }
-
-   if (instanceOfFAVFDConfig(config)) {
-      choices.push({name: "Volunteer Fire Department", value: "volunteer_fire_department"});
-   }
+   // if (instanceOfEMSConfig(config)) {
+   //    choices.push({name: "Emergency Medical Services", value: "emergency_medical_services"});
+   // }
+   //
+   // if (instanceOfFAVFDConfig(config)) {
+   //    choices.push({name: "Volunteer Fire Department", value: "volunteer_fire_department"});
+   // }
 
    const filteredChoices = choices.filter((choice) => choice.name.toLowerCase().startsWith(focusedValue.toLowerCase()));
 

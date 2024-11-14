@@ -3,7 +3,8 @@ import { Collection, ColorResolvable, Interaction, Snowflake } from "discord.js"
 // import lcfr from "./lcfr";
 import lcfrDevServer from "./lcfrDevServer";
 
-export type ConfigTypes = "fd" | "ems" | "favfd";
+// export type ConfigTypes = "fd" | "ems" | "favfd";
+export type ConfigTypes = "fd";
 
 export interface IConfig {
    /**
@@ -59,55 +60,6 @@ export interface IConfig {
       mainEmbedColor: ColorResolvable;
    }
 } 
-
-export interface IFAVFDConfig extends IConfig {
-   /**
-    * Used for type checks
-    */
-   readonly type: "favfd";
-}
-
-export interface IEMSConfig extends IConfig {
-   /**
-    * Used for type checks
-    */
-   readonly type: "ems";
-   /**
-    * Discord IDs of rank's roles
-    */
-   ranks: {
-      junior_paramedc: Snowflake,
-      paramedic: Snowflake,
-      senior_paramedc: Snowflake,
-      advanced_paramedc: Snowflake,
-      assistant_director: Snowflake,
-      deputy_director: Snowflake,
-      director: Snowflake,
-   },
-   /**
-    * Discord IDs of category roles
-    */
-   rankCategories: {
-      paramedicine: Snowflake,
-      directorates: Snowflake,
-   }
-}
-
-interface FMRanks {
-   probationary_fire_marshal: Snowflake,
-   junior_fire_marshal: Snowflake,
-   fire_marshal: Snowflake,
-   senior_fire_marshal: Snowflake,
-   supervisor_fire_marshal: Snowflake,
-   assistant_head_fire_marshal: Snowflake,
-   deputy_head_fire_marshal: Snowflake,
-   head_fire_marshal: Snowflake
-}
-
-interface FMRankCategories {
-  fire_marshal_service: Snowflake;
-  fm_ho: Snowflake;
-}
 
 export interface IFDConfig extends IConfig {
    /**
@@ -313,86 +265,22 @@ export class FDGlobalConfig implements IFDGlobalConfig {
    }
 }
 
-export interface IEMSGlobalConfig extends IGlobalConfig {
-   /**
-    * Arrays of role IDs from all servers
-    */
-   ranks: {
-      junior_paramedc: Array<Snowflake>,
-      paramedic: Array<Snowflake>,
-      senior_paramedc: Array<Snowflake>,
-      advanced_paramedc: Array<Snowflake>,
-      chief_executive_officer: Array<Snowflake>,
-      chief_operative_officer: Array<Snowflake>,
-      chief_operative_officer_assistant: Array<Snowflake>,
-   },
-   /**
-    * Arrays of role IDs from all servers 
-    */
-   rankCategories: {
-      paramedicine: Array<Snowflake>,
-      directorates: Array<Snowflake>,
-   }
-}
-
-export class EMSGlobalConfig implements IEMSGlobalConfig {
-   roles: IEMSGlobalConfig["roles"];
-   ranks: IEMSGlobalConfig["ranks"];
-   rankCategories: IEMSGlobalConfig["rankCategories"];
-
-   constructor() {
-      this.roles = {
-         employeeRole: [],
-         loaRole: [],
-         reactedToActivityTest: [],
-         appReader: [],
-      };
-      this.ranks = {
-         paramedic: [],
-         senior_paramedc: [],
-         advanced_paramedc: [],
-         junior_paramedc: [],
-         chief_executive_officer: [],
-         chief_operative_officer: [],
-         chief_operative_officer_assistant: [],
-      };
-      this.rankCategories = {
-         paramedicine: [],
-         directorates: [],
-      }
-   }
-}
-
-const configsCollection: Collection<Snowflake, IFDConfig | IEMSConfig | IFAVFDConfig> = new Collection();
+const configsCollection: Collection<Snowflake, IFDConfig> = new Collection();
 
 // configsCollection.set(lcfr.guildID, lcfr);
 configsCollection.set(lcfrDevServer.guildID, lcfrDevServer);
 
-export function getConfig(interaction: Interaction): IFDConfig | IEMSConfig | IFAVFDConfig | undefined {
+export function getConfig(interaction: Interaction): IFDConfig | undefined {
    if (!interaction.guildId) return undefined;
    return configsCollection.get(interaction.guildId);
 }
 
-export function getConfigByID(id: Snowflake): IFDConfig | IEMSConfig | IFAVFDConfig | undefined {
+export function getConfigByID(id: Snowflake): IFDConfig   | undefined {
    return configsCollection.get(id);
 }
 
-export function instanceOfFDConfig(config: IFDConfig | IEMSConfig | IFAVFDConfig): config is IFDConfig {
+export function instanceOfFDConfig(config: IFDConfig): config is IFDConfig {
    if (config.type === "fd") {
-      return true;
-   }
-   return false;
-}
-
-export function instanceOfEMSConfig(config: IFDConfig | IEMSConfig | IFAVFDConfig): config is IEMSConfig {
-   if (config.type === "ems") {
-      return true;
-   }
-   return false;
-}
-
-export function instanceOfFAVFDConfig(config: IFDConfig | IEMSConfig | IFAVFDConfig): config is IFAVFDConfig {
-   if (config.type === "favfd") {
       return true;
    }
    return false;
@@ -415,19 +303,6 @@ export function getFDGlobalConfig(): IFDGlobalConfig {
       }
       for (const property in config.ranks) {
          globalConfig.ranks[property as keyof typeof globalConfig.ranks].push(config.ranks[property as keyof typeof config.ranks]);
-      }
-   }
-
-   return globalConfig;
-}
-
-export function getEMSGlobalConfig(): IEMSGlobalConfig {
-   const globalConfig: IEMSGlobalConfig = new EMSGlobalConfig();
-
-   for (const [,config] of configsCollection) {
-      if (!instanceOfEMSConfig(config)) continue;
-      for (const property in config.roles) {
-         globalConfig.roles[property as keyof typeof globalConfig.roles].push(config.roles[property as keyof typeof config.roles]);
       }
    }
 

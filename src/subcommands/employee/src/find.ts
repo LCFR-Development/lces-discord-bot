@@ -53,9 +53,7 @@ export default async function({interaction}: SlashCommandProps) {
                `**Discord user:** <@${mainEmployee.discordID}> (${discordMember.user.username})\n`+
                `**Roblox user:** ${robloxMember.name} (${mainEmployee.robloxID})\n`+
                `**Employee ID:** ${FDEmployee.ID}\n`+
-               `**Rank:** ${getPrettyString(FDRanks[FDEmployee.rank])} (${FDRanks[FDEmployee.rank]})\n`+
-               `**Sub-divisions:**\n` + 
-               `${botConfig.emojis.empty} FM: ${mainEmployee.departments.FM}`
+               `**Rank:** ${getPrettyString(FDRanks[FDEmployee.rank])} (${FDRanks[FDEmployee.rank]})\n`
             );
          }
       }

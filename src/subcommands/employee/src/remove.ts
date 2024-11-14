@@ -36,10 +36,7 @@ export default async function({interaction}: SlashCommandProps) {
             `**Roblox user:** ${robloxUser.name} (${document.robloxID})\n`+
             `**Discord user:** <@${document.discordID}> (${(await interaction.guild?.members.fetch(document.discordID))?.user?.username})\n`+
             `**Departments:**\n` + 
-            `${botConfig.emojis.empty} FD: ${document.departments.FD}\n`+
-            `${botConfig.emojis.empty} FM: ${document.departments.FM}\n`+
-            `${botConfig.emojis.empty} EMS: ${document.departments.EMS}\n`+
-            `${botConfig.emojis.empty} FAVFD: ${document.departments.FAVFD}\n`
+            `${botConfig.emojis.empty} FD: ${document.departments.FD}\n`
          )
          .setColor("Red");
       

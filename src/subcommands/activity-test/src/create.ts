@@ -57,8 +57,6 @@ export default async function({interaction}: SlashCommandProps) {
       employeesReacted: []
    });
 
-
-
    const activityCheckEmbed = new EmbedBuilder()
       .setTitle(`${config.texts.deptName} | Activity check`)
       .setDescription(
