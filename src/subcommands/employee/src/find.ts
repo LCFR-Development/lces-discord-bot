@@ -11,6 +11,7 @@ import getPrettyString from "../../../utils/getPrettyString";
 import { FDRanks } from "../../../config/ranks/fdRanks";
 
 import botConfig from "../../../config/botConfig";
+import { Stations } from "../../../config/misc";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
@@ -48,12 +49,15 @@ export default async function({interaction}: SlashCommandProps) {
                await interaction.editReply({embeds: [getCommandFailedToRunEmbed(`Could not find an employee.`)]});
                return;
             }
+            const stationDB: Stations = FDEmployee.station;
+            const station: string = stationDB === Stations.None ? "None" : stationDB === Stations.Station1 ? "Station 1" : "Station 2";
             mainEmbed.setDescription(
                `**Callsign:** ${FDEmployee.callsign}\n`+
                `**Discord user:** <@${mainEmployee.discordID}> (${discordMember.user.username})\n`+
                `**Roblox user:** ${robloxMember.name} (${mainEmployee.robloxID})\n`+
                `**Employee ID:** ${FDEmployee.ID}\n`+
-               `**Rank:** ${getPrettyString(FDRanks[FDEmployee.rank])} (${FDRanks[FDEmployee.rank]})\n`
+               `**Rank:** ${getPrettyString(FDRanks[FDEmployee.rank])} (${FDRanks[FDEmployee.rank]})\n` +
+               `**Station:** ${station}`
             );
          }
       }

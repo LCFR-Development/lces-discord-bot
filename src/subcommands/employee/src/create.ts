@@ -10,6 +10,7 @@ import { MFDEmployee } from "../../../schemas/employees/fdEmployee";
 import getPrettyString from "../../../utils/getPrettyString";
 import { getConfig } from "../../../config";
 import getIsFDCallsignFree from "../../../utils/getIsFDCallsignFree";
+import { Stations } from "../../../config/misc";
 
 export type DeptFunctionProps = {mainEmployeeDocument: IEmployee, rankPlain: string, interaction: Interaction, commandInputs: {discordMember: GuildMember, robloxUser: RobloxUserFromUsername, callsign: string}}
 
@@ -34,6 +35,7 @@ export default async function({interaction}: SlashCommandProps) {
    const robloxUsername = interaction.options.getString("roblox") as string;
    const callsign = interaction.options.getString("callsign") as string;
    const rankInput = interaction.options.getString("rank") as string;
+   const stationInput = interaction.options.getString("station") as string;
 
    try {
       const robloxUserAxiosResponse = await axios.post<RobloxUsernameAPIResponce>(
@@ -77,6 +79,7 @@ export default async function({interaction}: SlashCommandProps) {
         }
 
         const rank: FDRanks = FDRanks[rankPlain as keyof typeof FDRanks];
+        const station: Stations = stationInput === "none" ? Stations.None : stationInput === "station1" ? Stations.Station1 : Stations.Station2;
         const departments = mainEmployeeDocument.departments;
         departments.FD = true;
         await MEmployee.updateOne({ID: mainEmployeeDocument.ID}, {$set: {departments}}); 
@@ -85,6 +88,7 @@ export default async function({interaction}: SlashCommandProps) {
           ID: employeeID,
           callsign: callsign,
           rank: rank,
+          station: station
         });
 
         await interaction.editReply({embeds: [getResponseEmbed(

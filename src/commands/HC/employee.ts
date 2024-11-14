@@ -36,6 +36,16 @@ export const data = new SlashCommandBuilder()
          .setRequired(true)
          .setAutocomplete(true)
       )
+      .addStringOption(o => o
+        .setName("station")
+        .setDescription("Station that the person works in.")
+        .setRequired(true)
+        .setChoices([
+          {name: "Station 1", value: "station1"},
+          {name: "Station 2", value: "station2"},
+          {name: "None", value: "none"}
+        ])
+      )
    )
    .addSubcommand(s => s
       .setName("find")
