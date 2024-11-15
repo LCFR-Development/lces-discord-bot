@@ -8,11 +8,11 @@ export interface IInfraction {
     */
    ID: string, 
    /**
-    * Discord ID of the HC that created the infraction
+    * Our main employee UUID of the HC that created the infraction
     */
-   highCommandID: Snowflake,
+   highCommandID: string,
    /**
-    * Discord ID of the infracted employee
+    * Our main employee UUID of the infracted employee
     */
    employeeID: Snowflake,
    /**
@@ -31,6 +31,15 @@ export interface IInfraction {
     * Reason of the infraction
     */
    reason: string,
+  
+  /**
+   * Notes for the infraction
+   */
+  notes: string;
+  /**
+   * Is the infraction appealable?
+   */
+  appealable: boolean;
 }
 
 export const SInfraction = new Schema<IInfraction>({
@@ -39,8 +48,10 @@ export const SInfraction = new Schema<IInfraction>({
     employeeID: {type: String, required: true},
     date: {type: String, required: true},
     guildID: {type: String, required: true},
-    infraction: {infraction: {type: Number, required: true}, strikeLevel: {type: Number, required: true}},
+    infraction: {infraction: {type: Number, required: true}, strikeLevel: {type: Number, required: false, default: undefined}},
     reason: {type: String, required: true},
+    notes: {type: String, required: true},
+    appealable: {type: Boolean, required: true}
 })
 
 export const MInfraction = model<IInfraction>("infractions", SInfraction);
