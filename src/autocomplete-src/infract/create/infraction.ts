@@ -12,9 +12,7 @@ export default function(interaction: Interaction) {
   const choices: Array<{name: string, value: string}> = [];
   
   if (instanceOfFDConfig(config)) {
-    choices.push({name: "FD - Strike 1", value: "fd_strike_1"});
-    choices.push({name: "FD - Strike 2", value: "fd_strike_2"});
-    choices.push({name: "FD - Strike 3", value: "fd_strike_3"});
+    choices.push({name: "FD - Strike", value: "fd_strike"});
     choices.push({name: "FD - Suspention", value: "fd_suspention"});
     choices.push({name: "FD - Termination", value: "fd_termination"});
   }

@@ -42,7 +42,8 @@ export interface IConfig {
       shift: Snowflake,
       appResults: Snowflake,
       promotions: Snowflake,
-      demotions: Snowflake
+      demotions: Snowflake,
+      infractions: Snowflake,
    }
    /**
     * Discord IDs of misc roles

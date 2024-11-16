@@ -8,7 +8,8 @@ const config: IFDConfig = {
       shift: "1266302472809615360",
       appResults: "1270684375427715135",
       promotions: "1274778238287216650",
-      demotions: "1274795698159616132"
+      demotions: "1274795698159616132",
+      infractions: "1307382232868061296"
    },
    texts: {
       deptName: "LCDS",

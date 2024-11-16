@@ -15,7 +15,8 @@ const config: IFDConfig = {
       shift: "1180500559095152650",
       appResults: "1161190781336440839",
       promotions: "1161190782397599773",
-      demotions: "1180559408896430100"
+      demotions: "1180559408896430100",
+      infractions: "1161190782758297641"
    },
    roles: {
       reactedToActivityTest: "1185940940175724635",
