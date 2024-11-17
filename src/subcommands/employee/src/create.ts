@@ -78,6 +78,12 @@ export default async function({interaction}: SlashCommandProps) {
           return;
         }
 
+        if (!Object.keys(FDRanks).includes(rankPlain)) {
+          await interaction.editReply({embeds: [getCommandFailedToRunEmbed("Invalid rank.")]});
+          return;
+        }
+        
+
         const rank: FDRanks = FDRanks[rankPlain as keyof typeof FDRanks];
         const station: Stations = stationInput === "none" ? Stations.None : stationInput === "station1" ? Stations.Station1 : Stations.Station2;
         const departments = mainEmployeeDocument.departments;

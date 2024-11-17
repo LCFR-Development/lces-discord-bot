@@ -179,6 +179,8 @@ export interface IBotConfig {
    emojis: {
       loading: string;
       empty: string;
+      redDot: string;
+      greenDot: string;
    }
 }
 

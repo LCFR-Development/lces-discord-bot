@@ -2,6 +2,7 @@ import { SlashCommandBuilder,  } from "discord.js";
 
 import { SlashCommandProps } from "commandkit";
 import CustomCommandOptions from "../../types/CustomCommandOptions";
+import subcommands from "../../subcommands/infraction";
 
 export const data = new SlashCommandBuilder()
   .setName("infraction")
@@ -37,7 +38,14 @@ export const data = new SlashCommandBuilder()
     )
   )
 
-export async function run({interaction, client}: SlashCommandProps) {
+export async function run({interaction, client, handler}: SlashCommandProps) {
+  const subcommand = interaction.options.getSubcommand();
+  
+  switch (subcommand) {
+    case "create":
+      subcommands.create({interaction, client, handler});
+    break;
+  }
 
 }
 

@@ -35,11 +35,11 @@ export interface IInfraction {
   /**
    * Notes for the infraction
    */
-  notes: string;
+  notes?: string;
   /**
    * Is the infraction appealable?
    */
-  appealable: boolean;
+  isAppealable: boolean;
 }
 
 export const SInfraction = new Schema<IInfraction>({
@@ -50,8 +50,8 @@ export const SInfraction = new Schema<IInfraction>({
     guildID: {type: String, required: true},
     infraction: {infraction: {type: Number, required: true}, strikeLevel: {type: Number, required: false, default: undefined}},
     reason: {type: String, required: true},
-    notes: {type: String, required: true},
-    appealable: {type: Boolean, required: true}
+    notes: {type: String, default: null},
+    isAppealable: {type: Boolean, required: true}
 })
 
 export const MInfraction = model<IInfraction>("infractions", SInfraction);
