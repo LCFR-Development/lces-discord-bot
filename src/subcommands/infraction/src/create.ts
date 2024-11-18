@@ -107,14 +107,14 @@ export default async function({interaction}: SlashCommandProps) {
     });
     
     await interaction.editReply({embeds: [getMessageLoadingEmbed("Success! Sending messages...")]});
-  
+      
     const mainEmbed = new EmbedBuilder()
       .setTitle("Infraction.")
       .setDescription(
         `**Employee:** <@!${employee.user.id}> (${employee.user.username})\n` +
         `**Reason:** ${reason}\n` +
         `**Notes:** ${notes ? notes : "N/A"}\n` + 
-        `**Infraction:** ${getPrettyString(FDInfractions[infraction]) + strikeLevel ? " " + strikeLevel : ""}\n` +
+        `**Infraction:** ${getPrettyString(FDInfractions[infraction])}${strikeLevel ? (" " + strikeLevel.toString()) : ""}\n` +
         `**Appealable:** ${isAppealable ? "Yes " + botConfig.emojis.greenDot : "No " + botConfig.emojis.redDot}`
       )
       .setFooter({text: infractionID})
@@ -126,7 +126,7 @@ export default async function({interaction}: SlashCommandProps) {
         `You have been infracted in ${config.texts.deptName}!\n` +
         `**Reason:** ${reason}\n` +
         `**Notes:** ${notes ? notes : "N/A"}\n` + 
-        `**Infraction:** ${getPrettyString(FDInfractions[infraction]) + strikeLevel ? " " + strikeLevel : ""}\n` +
+        `**Infraction:** ${getPrettyString(FDInfractions[infraction])}${strikeLevel ? (" " + strikeLevel.toString()) : ""}\n` +
         `**Appealable:** ${isAppealable ? "Yes " + botConfig.emojis.greenDot : "No " + botConfig.emojis.redDot}\n`
       )
       .setColor(config.colors.mainEmbedColor)
