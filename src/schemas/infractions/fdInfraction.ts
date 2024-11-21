@@ -40,6 +40,10 @@ export interface IInfraction {
    * Is the infraction appealable?
    */
   isAppealable: boolean;
+  /**
+   * Is the infraction active? (false if ex. revoked)
+   */
+  isActive: boolean;
 }
 
 export const SInfraction = new Schema<IInfraction>({
@@ -48,10 +52,11 @@ export const SInfraction = new Schema<IInfraction>({
     employeeID: {type: String, required: true},
     date: {type: String, required: true},
     guildID: {type: String, required: true},
-    infraction: {infraction: {type: Number, required: true}, strikeLevel: {type: Number, required: false, default: undefined}},
+    infraction: {infraction: {type: Number, required: true}, strikeLevel: {type: Number, default: undefined}},
     reason: {type: String, required: true},
     notes: {type: String, default: null},
-    isAppealable: {type: Boolean, required: true}
+    isAppealable: {type: Boolean, required: true},
+    isActive: {type: Boolean, default: true},
 })
 
 export const MInfraction = model<IInfraction>("infractions", SInfraction);

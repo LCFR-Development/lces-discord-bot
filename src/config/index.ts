@@ -6,6 +6,8 @@ import lcfrDevServer from "./lcfrDevServer";
 // export type ConfigTypes = "fd" | "ems" | "favfd";
 export type ConfigTypes = "fd";
 
+export type ConfigInterfaces = IFDConfig;
+
 export interface IConfig {
    /**
     * Discord ID of the server/guild
@@ -97,6 +99,15 @@ export interface IFDConfig extends IConfig {
       high_command: Snowflake,
       commissioner_office: Snowflake
    };
+  /**
+   * Discord IDs of infractions
+   */
+  infractions: {
+    strike_1: Snowflake,
+    strike_2: Snowflake,
+    strike_3: Snowflake,
+    suspention: Snowflake,
+  }
 
   // /**
   //  * Discord IDs of FM roles
@@ -119,6 +130,7 @@ export class FDConfig implements IFDConfig {
    colors: IFDConfig["colors"];
    channels: IFDConfig["channels"];
    roles: IFDConfig["roles"];
+   infractions: IFDConfig["infractions"];
    constructor() {
       this.guildID = "";
       this.type = "fd";
@@ -135,6 +147,7 @@ export class FDConfig implements IFDConfig {
          appResults: "",
          promotions: "",
          demotions: "",
+         infractions: "",
       };
       this.roles = {
          reactedToActivityTest: "",
@@ -142,6 +155,12 @@ export class FDConfig implements IFDConfig {
          employeeRole: "",
          appReader: "",
       };
+      this.infractions = {
+        strike_1: "",
+        strike_2: "",
+        strike_3: "",
+        suspention: "",
+      }
       this.colors = {
          mainEmbedColor: "Default",
       };
@@ -268,21 +287,21 @@ export class FDGlobalConfig implements IFDGlobalConfig {
    }
 }
 
-const configsCollection: Collection<Snowflake, IFDConfig> = new Collection();
+const configsCollection: Collection<Snowflake, ConfigInterfaces> = new Collection();
 
 // configsCollection.set(lcfr.guildID, lcfr);
 configsCollection.set(lcfrDevServer.guildID, lcfrDevServer);
 
-export function getConfig(interaction: Interaction): IFDConfig | undefined {
+export function getConfig(interaction: Interaction): ConfigInterfaces | undefined {
    if (!interaction.guildId) return undefined;
    return configsCollection.get(interaction.guildId);
 }
 
-export function getConfigByID(id: Snowflake): IFDConfig   | undefined {
+export function getConfigByID(id: Snowflake): ConfigInterfaces   | undefined {
    return configsCollection.get(id);
 }
 
-export function instanceOfFDConfig(config: IFDConfig): config is IFDConfig {
+export function instanceOfFDConfig(config: ConfigInterfaces): config is IFDConfig {
    if (config.type === "fd") {
       return true;
    }

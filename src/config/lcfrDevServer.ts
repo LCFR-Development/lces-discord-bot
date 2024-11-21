@@ -21,6 +21,12 @@ const config: IFDConfig = {
       employeeRole: "1262425657518854236",
       appReader: "1270714251715280896"
    },
+   infractions: {
+    strike_1: "temp",
+    strike_2: "temp",
+    strike_3: "temp",
+    suspention: "temp"
+   },
    colors: {
       mainEmbedColor: "DarkRed",
    },

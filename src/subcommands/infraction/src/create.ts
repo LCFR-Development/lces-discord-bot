@@ -11,7 +11,6 @@ import {v4 as uuid} from "uuid";
 import getPrettyString from "../../../utils/getPrettyString";
 import botConfig from "../../../config/botConfig";
 import getCommandSuccessEmbed from "../../../utils/getCommandSuccessEmbed";
-import { deleteModel } from "mongoose";
 
 export default async function({interaction}: SlashCommandProps) {
   const config = getConfig(interaction);

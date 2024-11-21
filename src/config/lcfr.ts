@@ -43,6 +43,12 @@ const config: IFDConfig = {
       deputy_commissioner: "1161190780027818066",
       commissioner: "1161190780027818067"
    },
+   infractions: {
+    strike_1: "1180877196252954654",
+    strike_2: "1181982007971020950",
+    strike_3: "1181982011762679938",
+    suspention: "1182271053628702830",
+   },
    rankCategories: {
       trainee_rank: "1161190779943931911",
       low_ranks: "1161190779977470004",
