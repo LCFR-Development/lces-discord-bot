@@ -5,6 +5,4 @@ node_modules
 .commandkit
 /.commandkit
 .vscode
-dist/**/*
-dist
 dist/
