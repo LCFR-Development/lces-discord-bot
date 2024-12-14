@@ -5,7 +5,7 @@ import { getConfig } from '../config/index';
 import getCommandFailedToRunEmbed from "../utils/getCommandFailedToRunEmbed";
 
 export default function({commandObj, interaction, handler}: ValidationProps): boolean {
-   if (!interaction.inCachedGuild()) return false;
+   if (!interaction.inCachedGuild()) return true;
    if (!getConfig(interaction as Interaction)) {
       if (interaction.isChatInputCommand()) {
          interaction.reply({ephemeral: true, embeds: [getCommandFailedToRunEmbed("This server is not registered. Contact a bot developer if you think this is an error.")]});

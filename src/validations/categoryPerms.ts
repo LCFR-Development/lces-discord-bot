@@ -36,9 +36,14 @@ export default function({interaction, handler, commandObj}: ValidationProps): bo
       case "apps":
          neededRole = [...getFDGlobalConfig().roles.appReader]; 
       break;
+  
+      case "rcrp":
+        neededRole = [...getFDGlobalConfig().rankCategories.high_command];
+      break;
 
       default: 
          neededRole = undefined;
+      break;
    }
    if (neededRole === undefined) return false;
 

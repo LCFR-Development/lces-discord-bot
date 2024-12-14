@@ -7,28 +7,24 @@ import subcommands from "../../subcommands/shift";
 export const data = new SlashCommandBuilder() 
    .setName("shift")
    .setDescription("shift stuff")
-   .addSubcommandGroup(s => s
-      .setName("post")
-      .setDescription("post stuff")
-      .addSubcommand(s => s
-         .setName("normal")
-         .setDescription("Post a shift to the shifts channel.")
-         .addStringOption(s => s
-            .setName("notes")
-            .setDescription("Notes about the shift")
-            .setRequired(false)
-         )
-      )
-      .addSubcommand(s => s
-         .setName("daily")
-         .setDescription("Post a daily shift to the shifts channel.")
-         .addStringOption(s => s
-            .setName("notes")
-            .setDescription("Notes about the shift")
-            .setRequired(false)
-         )
-      )
-   )
+   .addSubcommand(s => s
+       .setName("post")
+       .setDescription("Post a shift to the shifts channel.")
+       .addStringOption(o => o
+        .setName("station")
+        .setDescription("The station the shift is taking place in.")
+        .setRequired(true)
+        .setChoices([
+          {name: "Station 1", value: "Station1"},
+          {name: "Station 2", value: "Station2"},
+        ])
+       )
+       .addStringOption(s => s
+          .setName("notes")
+          .setDescription("Notes about the shift")
+          .setRequired(false)
+       )
+    )
    .addSubcommand(s => s
       .setName("find")
       .setDescription("Find a shift by ID.")
@@ -40,19 +36,12 @@ export const data = new SlashCommandBuilder()
    )
 
 export async function run({client, handler, interaction}: SlashCommandProps) {
-   const subcommandGroup = interaction.options.getSubcommandGroup();
    const subcommand = interaction.options.getSubcommand();
    
-   if (subcommandGroup === "post") {
-      switch (subcommand) {
-         case "normal": subcommands.post.normal({interaction, handler, client}); break;
-         case "daily": subcommands.post.daily({interaction, handler, client}); break;
-      }
-   } else if (subcommandGroup === null) {
-      switch (subcommand) {
-         case "find": subcommands.find({interaction, handler, client}); break;
-      }
-   }
+  switch (subcommand) {
+     case "find": subcommands.find({interaction, handler, client}); break;
+     case "post": subcommands.post({interaction, handler, client}); break;
+  }
 }
 
 export const options: CustomCommandOptions = {

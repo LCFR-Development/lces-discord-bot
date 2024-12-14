@@ -16,9 +16,9 @@ export interface IShift {
     */
    guild: Snowflake;
    /**
-    * Is this a daily shift
+    * What station did this shift take place in
     */
-   isDaily: boolean;
+   station: Stations;
    /**
     * Notes about the shift
     */
@@ -38,7 +38,7 @@ export const SShift = new Schema<IShift>({
    ID: {type: String, required: true},
    host: {type: String, required: true},
    guild: {type: String, required: true},
-   isDaily: {type: Boolean, required: true},
+   station: {type: Number, required: true},
    notes: {type: String, default: "N/A"},
    employeesAttended: {type: [{type: String, required: true}], default: []},
    time: {type: String, required: true}

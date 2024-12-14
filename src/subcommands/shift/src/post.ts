@@ -1,10 +1,12 @@
 import { SlashCommandProps } from "commandkit";
 import { EmbedBuilder } from "discord.js";
-import { getConfig } from "../../../../config";
-import { MShift } from "../../../../schemas/shift";
+import { getConfig } from "../../../config";
+import { MShift } from "../../../schemas/shift";
 import { v4 as uuid } from 'uuid';
-import getCommandSuccessEmbed from "../../../../utils/getCommandSuccessEmbed";
-import getMessageLoadingEmbed from "../../../../utils/getMessageLoadingEmbed";
+import getCommandSuccessEmbed from "../../../utils/getCommandSuccessEmbed";
+import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
+import { Stations } from "../../../config/misc";
+import getCommandFailedToRunEmbed from "../../../utils/getCommandFailedToRunEmbed";
 
 export default async function({interaction}: SlashCommandProps) {
    await interaction.deferReply({ephemeral: true});
@@ -17,6 +19,15 @@ export default async function({interaction}: SlashCommandProps) {
    await interaction.editReply({embeds: [getMessageLoadingEmbed("Creating shift...")]})
 
    const notes: string = interaction.options.getString("notes") ?? "N/A";
+
+   const stationRaw: string = interaction.options.getString("station") as string;
+  
+   if (!Object.keys(Stations).includes(stationRaw)) {
+     await interaction.editReply({embeds: [getCommandFailedToRunEmbed("Internal error")]});
+     return;
+   }
+
+   const station: Stations = Stations[stationRaw as keyof typeof Stations];
 
    const shiftID = uuid();
 
@@ -36,7 +47,7 @@ export default async function({interaction}: SlashCommandProps) {
       ID: shiftID,
       host: interaction.user.id,
       guild: interaction.guild.id,
-      isDaily: false,
+      station: station,
       notes: notes,
       time: new Date(Date.now())
    })

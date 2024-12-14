@@ -8,6 +8,7 @@ function getFDRankChoices(): Array<{name: string, value: string}> {
 }
 
 import subcommands from "../../subcommands/employee";
+import CustomCommandOptions from "../../types/CustomCommandOptions";
 
 export const data = new SlashCommandBuilder()
    .setName("employee")
@@ -90,4 +91,6 @@ export async function run({interaction, client, handler}: SlashCommandProps) {
    }
 }
       
-      
+export const options: CustomCommandOptions = {
+  skipCategoryPermsSubcommands: [{subcommand: "find"}] 
+}      
