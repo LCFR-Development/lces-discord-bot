@@ -5,6 +5,7 @@ import promoteRankAfter from "../../autocomplete-src/promote/rank-after";
 import demoteRankAfter from "../../autocomplete-src/demote/rank-after";
 import employeeFindDivision from "../../autocomplete-src/employee-find/division";
 import infraction from "../../autocomplete-src/infract/create/infraction";
+import employeeRetireDivision from "../../autocomplete-src/employee-retire/division";
 
 export default function(interaction: Interaction) {
    if (!interaction.isAutocomplete()) return;
@@ -26,6 +27,10 @@ export default function(interaction: Interaction) {
          } else if (interaction.options.getSubcommand() === "find") {
             if (interaction.options.getFocused(true).name === "division") {
                employeeFindDivision(interaction);
+            }
+         } else if (interaction.options.getSubcommand() === "retire") {
+            if (interaction.options.getFocused(true).name === "division") {
+               employeeRetireDivision(interaction);
             }
          }
       }

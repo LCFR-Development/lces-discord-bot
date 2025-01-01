@@ -64,6 +64,21 @@ export const data = new SlashCommandBuilder()
       )
    )
    .addSubcommand(s => s
+    .setName("retire")
+    .setDescription("Remove an employee from a division")
+    .addUserOption(o => o
+      .setName("employee")
+      .setDescription("The employee.")
+      .setRequired(true)
+    )
+    .addStringOption(o => o
+      .setName("division")
+      .setDescription("The division to remove the employee from.")
+      .setRequired(true)
+      .setAutocomplete(true)
+    )
+   )
+   .addSubcommand(s => s
       .setName("remove")
       .setDescription("Remove an employee")
       .addStringOption(o => o
@@ -87,6 +102,7 @@ export async function run({interaction, client, handler}: SlashCommandProps) {
          case "create": subcommands.create({interaction, client, handler}); break; 
          case "find": subcommands.find({interaction, client, handler}); break; 
          case "remove": subcommands.remove({interaction, client, handler}); break;
+         case "retire": subcommands.retire({interaction, client, handler}); break;
       }
    }
 }

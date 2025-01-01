@@ -41,9 +41,11 @@ export default async function({interaction}: SlashCommandProps) {
 
       mainEmbed.setTitle(`${robloxMember.name}`);
       mainEmbed.setColor(config.colors.mainEmbedColor);
+      let divisionFound: boolean = false;
 
       if (instanceOfFDConfig(config)) {
          if (division === "fd") {
+            divisionFound = true;
             const FDEmployee = await MFDEmployee.findOne({ID: mainEmployee.ID});
             if (!FDEmployee) {
                await interaction.editReply({embeds: [getCommandFailedToRunEmbed(`Could not find an employee.`)]});
@@ -61,10 +63,14 @@ export default async function({interaction}: SlashCommandProps) {
             );
          }
       }
+      if (!divisionFound) {
+        await interaction.editReply({embeds: [getCommandFailedToRunEmbed("Division not found.")]});
+        return;
+      }
    } catch (error) {
       await interaction.editReply({embeds: [getCommandFailedToRunEmbed(`There was an error while executing this command.`)]});
       return;
    }
-
+   
    await interaction.editReply({embeds: [mainEmbed]});
 }
