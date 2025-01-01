@@ -105,6 +105,13 @@ export default async function({interaction}: SlashCommandProps) {
       isAppealable: isAppealable
     });
     
+    if (infraction === FDInfractions.termination) {
+      await FDEmployee.deleteOne();
+      const departments = mainEmployeeDocument.departments;
+      departments.FD = false;
+      await mainEmployeeDocument.updateOne({$set: {departments}});
+    }
+
     await interaction.editReply({embeds: [getMessageLoadingEmbed("Success! Sending messages...")]});
       
     const mainEmbed = new EmbedBuilder()
