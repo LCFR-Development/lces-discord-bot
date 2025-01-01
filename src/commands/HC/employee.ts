@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { FDConfig } from "../../config";
+import { FDConfig, getFDGlobalConfig } from "../../config";
 import { SlashCommandProps } from "commandkit";
 
 function getFDRankChoices(): Array<{name: string, value: string}> {
@@ -92,5 +92,6 @@ export async function run({interaction, client, handler}: SlashCommandProps) {
 }
       
 export const options: CustomCommandOptions = {
-  skipCategoryPermsSubcommands: [{subcommand: "find"}] 
+  skipCategoryPermsSubcommands: [{subcommand: "find"}],
+  subcommandRequiredRoles: [{subcommand: {subcommand: "remove"}, requiredRoles: {roles: [...getFDGlobalConfig().rankCategories.commissioner_office]}}] 
 }      
