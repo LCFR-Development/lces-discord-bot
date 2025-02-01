@@ -14,7 +14,7 @@ export interface IInfraction {
    /**
     * Our main employee UUID of the infracted employee
     */
-   employeeID: Snowflake,
+   employeeID: string,
    /**
     * Date of the infraction
     */
@@ -31,7 +31,10 @@ export interface IInfraction {
     * Reason of the infraction
     */
    reason: string,
-  
+  /**
+   * The discord ID of the infraction message 
+   */  
+  messageID: Snowflake,
   /**
    * Notes for the infraction
    */
@@ -54,6 +57,7 @@ export const SInfraction = new Schema<IInfraction>({
     guildID: {type: String, required: true},
     infraction: {infraction: {type: Number, required: true}, strikeLevel: {type: Number, default: undefined}},
     reason: {type: String, required: true},
+    messageID: {type: String, required: true},
     notes: {type: String, default: null},
     isAppealable: {type: Boolean, required: true},
     isActive: {type: Boolean, default: true},

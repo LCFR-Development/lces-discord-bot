@@ -113,7 +113,7 @@ export default async function({interaction}: SlashCommandProps) {
       await interaction.editReply({embeds: [getMessageLoadingEmbed("Infracting the employee...")]});
     }
 
-    await MInfraction.create({
+    const newInfraction = await MInfraction.create({
       ID: infractionID,
       infraction: infractionObject,
       date: new Date(),
@@ -121,6 +121,7 @@ export default async function({interaction}: SlashCommandProps) {
       highCommandID: HCEmployeeDocument.ID,
       guildID: interaction.guild.id,
       reason: reason,
+      messageID: "ifyouseethistherewasanerror",
       notes: notes,
       isAppealable: isAppealable
     });
@@ -152,9 +153,15 @@ export default async function({interaction}: SlashCommandProps) {
       .setColor(config.colors.mainEmbedColor)
       .setFooter({text: `Infraction ID: ${infractionID}`});
     
-    await infractionsChannel.send({embeds: [mainEmbed], content: `<@!${employee.user.id}>`});
+    const mainMessage = await infractionsChannel.send({embeds: [mainEmbed], content: `<@!${employee.user.id}>`});
     await employee.user.send({embeds: [DMEmbed]}).catch(() => {});
     
+    await newInfraction.updateOne({
+      $set: { 
+        messageID: mainMessage.id
+      }
+    })
+
     await interaction.editReply({embeds: [getCommandSuccessEmbed()]});
   }
 }
