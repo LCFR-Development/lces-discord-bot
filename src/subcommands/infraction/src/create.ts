@@ -1,12 +1,12 @@
 import { SlashCommandProps } from "commandkit";
-import { EmbedBuilder, GuildMember } from "discord.js";
+import { EmbedBuilder, GuildMember, RoleResolvable, Snowflake } from "discord.js";
 import { getConfig, instanceOfFDConfig } from "../../../config";
 import { MEmployee } from "../../../schemas/employees/employee";
 import getCommandFailedToRunEmbed from "../../../utils/getCommandFailedToRunEmbed";
 import { MInfraction as MInfraction } from "../../../schemas/infractions/fdInfraction";
 import { MFDEmployee } from "../../../schemas/employees/fdEmployee";
 import getMessageLoadingEmbed from "../../../utils/getMessageLoadingEmbed";
-import { FDInfraction, FDInfractions, StrikeLevel } from "../../../config/infractions/fdInfractions";
+import { FDInfraction, FDInfractions, getFDInfractionData, StrikeLevel } from "../../../config/infractions/fdInfractions";
 import {v4 as uuid} from "uuid";
 import getPrettyString from "../../../utils/getPrettyString";
 import botConfig from "../../../config/botConfig";
@@ -93,6 +93,26 @@ export default async function({interaction}: SlashCommandProps) {
       strikeLevel
     }
 
+    if (infraction === FDInfractions.termination) {
+      await interaction.editReply({embeds: [getMessageLoadingEmbed("Removing employees roles...")]});
+      await FDEmployee.deleteOne();
+      const departments = mainEmployeeDocument.departments;
+      departments.FD = false;
+      await mainEmployeeDocument.updateOne({$set: {departments}});
+      employee.roles.remove([
+        ...Object.values(config.roles),
+        ...Object.values(config.infractions),
+        ...Object.values(config.ranks),
+        ...Object.values(config.rankCategories)
+      ]);
+      await interaction.editReply({embeds: [getMessageLoadingEmbed("Removing employees previous infractions...")]});
+      const allPreviousInfractions = await MInfraction.find({employeeID: mainEmployeeDocument.ID});
+      for (const i of allPreviousInfractions) {
+        await i.deleteOne();
+      }
+      await interaction.editReply({embeds: [getMessageLoadingEmbed("Infracting the employee...")]});
+    }
+
     await MInfraction.create({
       ID: infractionID,
       infraction: infractionObject,
@@ -105,13 +125,7 @@ export default async function({interaction}: SlashCommandProps) {
       isAppealable: isAppealable
     });
     
-    if (infraction === FDInfractions.termination) {
-      await FDEmployee.deleteOne();
-      const departments = mainEmployeeDocument.departments;
-      departments.FD = false;
-      await mainEmployeeDocument.updateOne({$set: {departments}});
-    }
-
+    
     await interaction.editReply({embeds: [getMessageLoadingEmbed("Success! Sending messages...")]});
       
     const mainEmbed = new EmbedBuilder()
