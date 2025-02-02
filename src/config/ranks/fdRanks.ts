@@ -13,8 +13,6 @@ export enum FDRanks {
    district_chief,
    assistant_fire_chief,
    fire_chief,
-   assistant_commissioner,
-   deputy_commissioner,
    commissioner
 };
 
@@ -94,7 +92,7 @@ export function getFDRankInfo(rank: FDRanks, guildID: Snowflake): FDRank | undef
    } else if (rank >= FDRanks.battalion_chief && rank <= FDRanks.fire_chief) {
       rankCategory = FDRankCategories.high_command;
       
-   } else if (rank >= FDRanks.assistant_commissioner && rank <= FDRanks.commissioner) {
+   } else if (rank === FDRanks.commissioner) {
       rankCategory = FDRankCategories.commissioner_office;
 
    } else {

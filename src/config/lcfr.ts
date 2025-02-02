@@ -39,8 +39,6 @@ const config: IFDConfig = {
       district_chief: "1206993470992949249",
       assistant_fire_chief: "1206993468291809381",
       fire_chief: "1206993347005120514",
-      assistant_commissioner: "1161190779977470012",
-      deputy_commissioner: "1161190780027818066",
       commissioner: "1161190780027818067"
    },
    infractions: {

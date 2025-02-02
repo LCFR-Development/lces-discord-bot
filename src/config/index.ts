@@ -84,8 +84,6 @@ export interface IFDConfig extends IConfig {
       district_chief: Snowflake,
       assistant_fire_chief: Snowflake,
       fire_chief: Snowflake,
-      assistant_commissioner: Snowflake,
-      deputy_commissioner: Snowflake,
       commissioner: Snowflake
    }
    /**
@@ -176,8 +174,6 @@ export class FDConfig implements IFDConfig {
          district_chief: "",
          assistant_fire_chief: "",
          fire_chief: "",
-         assistant_commissioner: "",
-         deputy_commissioner: "",
          commissioner: "",
       };
       this.rankCategories = {
@@ -231,8 +227,6 @@ export interface IFDGlobalConfig extends IGlobalConfig {
       district_chief: Array<Snowflake>,
       assistant_fire_chief: Array<Snowflake>,
       fire_chief: Array<Snowflake>,
-      assistant_commissioner: Array<Snowflake>,
-      deputy_commissioner: Array<Snowflake>,
       commissioner: Array<Snowflake>
    },
    /**
@@ -272,8 +266,6 @@ export class FDGlobalConfig implements IFDGlobalConfig {
          district_chief: [],
          assistant_fire_chief: [],
          fire_chief: [],
-         assistant_commissioner: [],
-         deputy_commissioner: [],
          commissioner: [],
       };
       this.rankCategories = {

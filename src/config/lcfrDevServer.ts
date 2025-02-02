@@ -45,8 +45,6 @@ const config: IFDConfig = {
       district_chief: "temp",
       assistant_fire_chief: "temp",
       fire_chief: "temp",
-      assistant_commissioner: "temp",
-      deputy_commissioner: "temp",
       commissioner: "temp"
    },
    rankCategories: {
