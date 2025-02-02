@@ -83,7 +83,7 @@ export default async function({interaction}: SlashCommandProps) {
 
          if (inactiveMembers.size > 0) {
             for (const [id ,member] of inactiveMembers) {
-               let username = member.user.username ?? "No username found";
+               const username = member.user.username ?? "No username found";
                inactiveMembersString += `<@!${id}> (${username})\n`;
             }
          } else {
@@ -130,7 +130,7 @@ export default async function({interaction}: SlashCommandProps) {
             async (subSubInteraction: ButtonInteraction) => {
                let reactedMembersString = "";
                for (const memberID of document.employeesReacted) {
-                  let username = interaction.guild?.members.cache.get(memberID)?.user.username ?? "No username found";
+                  const username = interaction.guild?.members.cache.get(memberID)?.user.username ?? "No username found";
                   reactedMembersString += `<@!${memberID}> (${username})\n`;
                }
                const plainReactedMembersEmbed = new EmbedBuilder()
